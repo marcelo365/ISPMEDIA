@@ -1,0 +1,1880 @@
+<body #body>
+
+    <div class="sidebar">
+
+        <div class="logo">
+            <p> <span class="emoji">🧑‍🤝‍🧑</span> ISPMEDIA</p>
+        </div>
+
+        <div class="ajustar">
+
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a (click)="irPaginaInicial()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'pagina-inicial'}">
+                            <span class="fa fa-home"></span>
+                            <span>Página Inicial</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaArtistas()" [ngClass]="{'seleccionado': abaSeleccionada === 'artistas'}">
+                            <span class="fa fa-microphone"></span>
+                            <span>Artistas</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaAlbuns()" [ngClass]="{'seleccionado': abaSeleccionada === 'albuns'}">
+                            <span class="fa fa-compact-disc"></span>
+                            <span>Álbuns</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaMusicas()" [ngClass]="{'seleccionado': abaSeleccionada === 'musicas'}">
+                            <span class="fa fas fa-music"></span>
+                            <span>Músicas</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaVideos()" [ngClass]="{'seleccionado': abaSeleccionada === 'videos'}">
+                            <span class="fa fas fa-film"></span>
+                            <span>Vídeos</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a (click)="irTelaMidiasCarregados()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'midiasCarregados'}">
+                            <span class="fa fas fa-photo-film"></span>
+                            <span>Mídias Carregadas</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaMidiasExternas()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'midiasExternas'}">
+                            <span class="fa fas fa-share-from-square"></span>
+                            <span>Mídias Externas</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaGrupos()" [ngClass]="{'seleccionado': abaSeleccionada === 'grupos'}">
+                            <span class="fa fas fa-users"></span>
+                            <span>Grupos</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaPlaylists()" [ngClass]="{'seleccionado': abaSeleccionada === 'playlists'}">
+                            <span class="fa fas fa-list"></span>
+                            <span>Playlists</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irPaginaLive()" [ngClass]="{'seleccionado': abaSeleccionada === 'lives'}">
+                            <span class="fa fas fa-video"></span>
+                            <span>Live</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a (click)="irTelaEstacoesRadio()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'estacoesRadio'}">
+                            <span class="fa fas fa-radio"></span>
+                            <span>Estações de Rádio</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="policies">
+            <ul>
+                <li>
+                    <a (click)="voltarPaginaLogin()">Desconectar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="topbar">
+
+        <div class="prev-next-buttons">
+            <button type="button"></button>
+            <button type="button"></button>
+        </div>
+
+        <div class="search-bar non-active" #barraPesquisa>
+            <input [(ngModel)]="pesquisaInput" type="text" placeholder="Pesquisar..." />
+            <span (click)="efectuarPesquisa()" class="emoji">🔍︎</span>
+        </div>
+
+        <div class="user-profile">
+            <span class="emoji">👤</span>
+            <span class="username">{{username}}</span>
+        </div>
+
+    </div>
+
+    <!--PÁGINA INICIAL-->
+    <div class="main-container" [ngClass]="{'non-active': abaSeleccionada != 'pagina-inicial'}" #mainContainer>
+
+        <div class="categorias">
+            <h2>Artistas</h2>
+
+            <div class="list">
+                <div class="item" *ngFor="let artista of conjuntoArtistas" (click)="abrirVisualizacaoArtista(artista)">
+                    <img [src]="getRecursoUrl(artista.caminhoFoto)" />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                        <span *ngIf="verificarSeUsuarioOwnerGrupoGeral()" (click)="abrirModalEditarArtista(artista)"
+                            class="fa fa-pencil da"></span>
+                    </div>
+                    <h4>{{ artista.nome }}</h4>
+                    <p>{{ artista.biografia }}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="categorias">
+
+            <h2>Álbuns</h2>
+
+            <div class="list">
+                <div class="item" *ngFor="let album of conjuntoAlbuns" (click)="abrirVisualizacaoAlbum(album)">
+                    <img [src]=getRecursoUrl(album.caminhoFoto) />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{ album.titulo }}</h4>
+                    <p>{{ album.descricao }}</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="categorias">
+            <h2>Músicas</h2>
+            <div class="list">
+
+                <div class="item" *ngFor="let musica of conjuntoMusicas; let i = index"
+                    (click)="rodarMusica(musica , conjuntoArtistasMusicas[i])">
+
+                    <img [src]="getRecursoUrl(musica.caminhoFoto)" />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{ musica.titulo }}</h4>
+
+                    <i *ngIf="verificarSeMusicaVideoPrivados(musica , 'musica')" class="fa fa-lock"
+                        style="color: red; margin-bottom: 10px;" title="Privado"></i>
+
+                    <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(musica , 'musica')" class="fa fa-lock"
+                        style="color: rgb(255, 162, 0); margin-bottom: 10px;" title="Privado"></i>
+
+                    <p>Criada por : {{ conjuntoCriadoresPostagemMusicas[i].username }} | Artistas :
+                        <span *ngFor="let artistaMusica of conjuntoArtistasMusicas[i]; let last = last">
+                            {{ artistaMusica.nome }}<span *ngIf="!last">, </span>
+                        </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="categorias">
+            <h2>Vídeos</h2>
+
+            <div class="list">
+                <div class="item" *ngFor="let video of conjuntoVideos; let i = index" (click)="rodarVideo(video)">
+
+                    <img [src]="getRecursoUrl(video.caminhoFoto)" />
+
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{video.titulo}}</h4>
+
+                    <i *ngIf="verificarSeMusicaVideoPrivados(video , 'video')" class="fa fa-lock"
+                        style="color: red; margin-bottom: 10px;" title="Privado"></i>
+
+                    <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(video , 'video')" class="fa fa-lock"
+                        style="color: rgb(255, 162, 0); margin-bottom: 10px;" title="Privado"></i>
+
+                    <p>Criado por : {{ conjuntoCriadoresPostagemVideos[i].username }} | {{video.descricao}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--PÁGINA DE ARTISTAS-->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'artistas'}">
+
+        <div class="categorias">
+            <h2>Artistas</h2>
+
+            <div class="list">
+                <div class="item" *ngFor="let artista of conjuntoArtistas" (click)="abrirVisualizacaoArtista(artista)">
+                    <img [src]="getRecursoUrl(artista.caminhoFoto)" />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                        <span *ngIf="verificarSeUsuarioOwnerGrupoGeral()" (click)="abrirModalEditarArtista(artista)"
+                            class="fa fa-pencil da"></span>
+                    </div>
+                    <h4>{{ artista.nome }}</h4>
+                    <p>{{ artista.biografia }}</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--PÁGINA DE ALBUNS-->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'albuns'}">
+
+        <div class="categorias">
+            <h2>Álbuns</h2>
+
+            <div class="list">
+                <div class="item" *ngFor="let album of conjuntoAlbuns" (click)="abrirVisualizacaoAlbum(album)">
+                    <img [src]=getRecursoUrl(album.caminhoFoto) />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{ album.titulo }}</h4>
+                    <p>{{ album.descricao }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--PÁGINA DE MÚSICAS-->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'musicas'}">
+
+        <div class="categorias">
+            <h2>Músicas</h2>
+
+            <div *ngFor="let categoria of conjuntoCategoriasMusicas">
+                <h3>{{ categoria.nome }}</h3>
+
+                <div class="list">
+                    <div class="item"
+                        *ngFor="let musica of pegarMusicasVideosDeUmaCategoria(categoria.id , 'musica'); let i = index"
+                        (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+
+                        <img [src]="getRecursoUrl(musica.caminhoFoto)" />
+                        <div class="play">
+                            <span class="fa fa-play"></span>
+                        </div>
+
+                        <h4>{{ musica.titulo }}</h4>
+
+                        <i *ngIf="verificarSeMusicaVideoPrivados(musica , 'musica')" class="fa fa-lock"
+                            style="color: red; margin-bottom: 10px;" title="Privado"></i>
+
+                        <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(musica , 'musica')" class="fa fa-lock"
+                            style="color: rgb(255, 162, 0); margin-bottom: 10px;" title="Privado"></i>
+
+                        <p>
+                            Criada por: {{ conjuntoCriadoresPostagemMusicas[getIndexOriginal(musica ,
+                            'musica')]?.username }} |
+                            Artistas:
+                            <span
+                                *ngFor="let artista of conjuntoArtistasMusicas[getIndexOriginal(musica , 'musica')]; let last = last">
+                                {{ artista.nome }}<span *ngIf="!last">, </span>
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!-- PÁGINA DE VÍDEOS -->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'videos'}">
+
+        <div class="categorias">
+            <h2>Vídeos</h2>
+
+            <div *ngFor="let categoria of conjuntoCategoriasVideos">
+                <h3>{{ categoria.nome }}</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let video of pegarMusicasVideosDeUmaCategoria(categoria.id , 'video')"
+                        (click)="rodarVideo(video)">
+
+                        <img [src]="getRecursoUrl(video.caminhoFoto)" />
+
+                        <div class="play">
+                            <span class="fa fa-play"></span>
+                        </div>
+
+                        <h4>{{ video.titulo }}</h4>
+
+                        <i *ngIf="verificarSeMusicaVideoPrivados(video , 'video')" class="fa fa-lock"
+                            style="color: red; margin-bottom: 10px;" title="Privado"></i>
+
+                        <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(video , 'video')" class="fa fa-lock"
+                            style="color: rgb(255, 162, 0); margin-bottom: 10px;" title="Privado"></i>
+
+                        <p>
+                            Criado por: {{ conjuntoCriadoresPostagemVideos[getIndexOriginal(video, 'video')]?.username
+                            }} |
+                            {{ video.descricao }}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- PÁGINA MÍDIAS CARREGADOS -->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'midiasCarregados'}">
+
+        <div class="categorias">
+            <h2>Mídias Carregadas</h2>
+
+            <div class="botoes-acoes-grupo">
+                <button class="botao-adicionar" (click)="abrirModalAdicionarMusica()">+ Adicionar Música</button>
+                <button class="botao-adicionar" (click)="abrirModalAdicionarVideo()">+ Adicionar Vídeo</button>
+                <button class="botao-adicionar" (click)="abrirModalAdicionarAlbum()">+ Adicionar Álbum</button>
+
+                <!-- NOVO BOTÃO DE COMPARTILHAMENTO -->
+                <button class="botao-compartilhar-midias" title="Compartilhar minhas mídias"
+                    (click)="abrirModalCompartilharMidiasUsuario()">
+                    <i class="fas fa-share-alt"></i>
+                    Compartilhar Mídias
+                </button>
+            </div>
+
+            <div>
+                <h3>Meus Álbuns</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let album of conjuntoMeusAlbuns">
+                        <img [src]=getRecursoUrl(album.caminhoFoto) />
+                        <div class="play">
+                            <span (click)="abrirVisualizacaoAlbum(album)" class="fa fa-play"></span>
+                            <span (click)="abrirModalEditarAlbum(album)" class="fa fa-pencil da"></span>
+                            <span class="fa fa-trash delete-icon"></span>
+                        </div>
+                        <h4>{{ album.titulo }}</h4>
+                        <p>{{ album.descricao }}</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+                <h3>Músicas</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let meuCarregadoMusica of conjuntoMeusCarregadosMusicas; let i = index">
+
+
+                        <img [src]="getRecursoUrl(meuCarregadoMusica.musica.caminhoFoto)" />
+                        <div class="play">
+                            <span
+                                (click)="rodarMusica(meuCarregadoMusica.musica, pegarArtistasMusica(meuCarregadoMusica.musica , conjuntoMusicas , conjuntoArtistasMusicas))"
+                                class="fa fa-play"></span>
+                            <span (click)="abrirModalEditarMusica(meuCarregadoMusica.musica)"
+                                class="fa fa-pencil da"></span>
+                            <span class="fa fa-trash delete-icon"></span>
+                            <span (click)="abrirModalPartilharConteudo(meuCarregadoMusica.musica , 'musica' )"
+                                *ngIf="meuCarregadoMusica.vinculoDireto == false"
+                                class="fa fa-paperclip share-icon"></span>
+                        </div>
+
+                        <h4>{{ meuCarregadoMusica.musica.titulo }}</h4>
+                        <i *ngIf="meuCarregadoMusica.vinculoDireto == false" class="fa fa-lock"
+                            style="color: red; margin-bottom: 10px;" title="Privado"></i>
+                        <p>
+                            Criada por: {{ meuCarregadoMusica.utilizador.username }} |
+                            Artistas:
+                            <span
+                                *ngFor="let artista of pegarArtistasMusica(meuCarregadoMusica.musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
+                                {{ artista.nome }}<span *ngIf="!last">, </span>
+                            </span>
+                        </p>
+
+                        <p class="criadoDirectamenteGrupo"
+                            *ngIf="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoMusica , 'musica')">
+                            <span>Criada
+                                directamente no grupo {{
+                                verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoMusica , 'musica')!.nome }}
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+                <h3>Vídeos</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let meuCarregadoVideo of conjuntoMeusCarregadosVideos">
+
+                        <img [src]="getRecursoUrl(meuCarregadoVideo.video.caminhoFoto)" />
+
+                        <div class="play">
+                            <span (click)="rodarVideo(meuCarregadoVideo.video)" class="fa fa-play"></span>
+                            <span (click)="abrirModalEditarVideo(meuCarregadoVideo.video)"
+                                class="fa fa-pencil da"></span>
+                            <span class="fa fa-trash delete-icon"></span>
+                            <span (click)="abrirModalPartilharConteudo(meuCarregadoVideo.video , 'video')"
+                                *ngIf="meuCarregadoVideo.vinculoDireto == false"
+                                class="fa fa-paperclip share-icon"></span>
+                        </div>
+
+                        <h4>{{ meuCarregadoVideo.video.titulo }}</h4>
+                        <i *ngIf="meuCarregadoVideo.vinculoDireto == false" class="fa fa-lock"
+                            style="color: red; margin-bottom: 10px;" title="Privado"></i>
+                        <p>
+                            Criado por: {{ meuCarregadoVideo.utilizador.username }} |
+                            {{ meuCarregadoVideo.video.descricao }}
+                        </p>
+
+                        <p class="criadoDirectamenteGrupo"
+                            *ngIf="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoVideo , 'video') as grupo">
+                            <span>
+                                Criada directamente no grupo {{ grupo.nome }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PÁGINA GRUPOS -->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'grupos'}">
+        <div class="categorias">
+            <h2>Grupos</h2>
+
+            <div class="botoes-acoes-grupo">
+                <button class="botao-adicionar" (click)="abrirModalAdicionarGrupo()">+ Criar Grupo</button>
+            </div>
+
+            <div>
+                <h4 class="detalhesCima">Grupos criados por mim</h4>
+                <div class="lista-grupos">
+                    <div class="grupo-item" *ngFor="let grupo of conjuntoGruposCriadosPorMim"
+                        (click)="abrirVisualizacaoGrupo(grupo)">
+                        <div class="grupo-icon">🏘️</div>
+                        <div class="info-grupo-extra">
+                            <div class="info-nome-grupo">{{ grupo.nome }}</div>
+                            <div class="info-secundaria-grupo">
+                                <span class="tag-privacidade" [ngClass]="{ 'privado': !grupo.publico }">
+                                    {{ grupo.publico ? 'Público' : 'Privado' }}
+                                </span>
+                                <span class="criador-grupo">• Criado por {{ grupo.utilizador.username }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="detalhesCima">Grupos onde estou contido</h4>
+                <div class="lista-grupos">
+                    <div class="grupo-item" *ngFor="let grupo of conjuntoGruposUsuario"
+                        (click)="abrirVisualizacaoGrupo(grupo)">
+                        <div class="grupo-icon">🏘️</div>
+                        <div class="info-grupo-extra">
+                            <div class="info-nome-grupo">{{ grupo.nome }}</div>
+                            <div class="info-secundaria-grupo">
+                                <span class="tag-privacidade" [ngClass]="{ 'privado': !grupo.publico }">
+                                    {{ grupo.publico ? 'Público' : 'Privado' }}
+                                </span>
+                                <span class="criador-grupo">• Criado por {{ grupo.utilizador.username }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="detalhesCima">Grupos Visíveis</h4>
+                <div class="lista-grupos">
+                    <div class="grupo-item" *ngFor="let grupo of conjuntoGruposVisiveis"
+                        (click)="abrirVisualizacaoGrupo(grupo)">
+                        <div class="grupo-icon">🏘️</div>
+                        <div class="info-grupo-extra">
+                            <div class="info-nome-grupo">{{ grupo.nome }}</div>
+                            <div class="info-secundaria-grupo">
+                                <span class="tag-privacidade" [ngClass]="{ 'privado': !grupo.publico }">
+                                    {{ grupo.publico ? 'Público' : 'Privado' }}
+                                </span>
+                                <span class="criador-grupo">• Criado por {{ grupo.utilizador.username }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- PÁGINA Playlists -->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'playlists'}">
+        <div class="categorias">
+
+            <h2>Playlists</h2>
+
+            <div class="botoes-acoes-grupo">
+                <button class="botao-adicionar" (click)="abrirModalAdicionarPlaylist()">+ Criar Playlist</button>
+            </div>
+
+            <div>
+                <h4 class="detalhesCima">Minhas Playlists</h4>
+                <div class="lista-grupos">
+                    <div class="grupo-item" *ngFor="let playlist of conjuntoPlaylistsUsuario"
+                        (click)="abrirVisualizacaoPlaylist(playlist)">
+                        <div class="grupo-icon">🎶</div>
+                        <div class="info-grupo-extra">
+                            <div class="info-nome-grupo">{{ playlist.titulo }}</div>
+                            <div class="info-secundaria-grupo">
+                                <span class="tag-privacidade" [ngClass]="{ 'privado': playlist.privada }">
+                                    {{ playlist.privada ? 'Privada' : 'Público' }}
+                                </span>
+                                <span class="criador-grupo">• Criado por {{ playlist.utilizador.username }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="detalhesCima">Playlists Públicas</h4>
+                <div class="lista-grupos">
+                    <div class="grupo-item" *ngFor="let playlist of conjuntoPlaylistsVisiveis"
+                        (click)="abrirVisualizacaoPlaylist(playlist)">
+                        <div class="grupo-icon">🎶</div>
+                        <div class="info-grupo-extra">
+                            <div class="info-nome-grupo">{{ playlist.titulo }}</div>
+                            <div class="info-secundaria-grupo">
+                                <span class="tag-privacidade" [ngClass]="{ 'privado': playlist.privada }">
+                                    {{ playlist.privada ? 'Privada' : 'Público' }}
+                                </span>
+                                <span class="criador-grupo">• Criado por {{ playlist.utilizador.username }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- PÁGINA MÍDIAS EXTERNAS -->
+    <div class="main-container pagina" [ngClass]="{ 'non-active': abaSeleccionada != 'midiasExternas' }">
+        <div class="categorias">
+            <h2>Mídias Externas</h2>
+
+            <div>
+                <h4 class="detalhesCima">Usuários que compartilharam mídias</h4>
+                <div class="lista-usuarios-midias-externas">
+                    <div class="usuario-item-midias-externas" *ngFor="let usuario of conjuntoUsuariosCompartilhouMidias"
+                        (click)="abrirVisualizacaoMidiasCompartilhadasPor(usuario)">
+                        <span class="emoji-usuario-midias-externas">👤</span>
+                        <div class="usuario-info-midias-externas">
+                            <h4>{{ usuario.username }}</h4>
+                            <p>{{ usuario.nome }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="detalhesCima">Usuários com quem partilhei</h4>
+                <div class="lista-usuarios-midias-externas">
+                    <div class="usuario-item-midias-externas" *ngFor="let usuario of conjuntoUsuariosPartilheiMidias">
+                        <span class="emoji-usuario-midias-externas">👤</span>
+                        <div class="usuario-info-midias-externas">
+                            <h4>{{ usuario.username }}</h4>
+                            <p>{{ usuario.nome }}</p>
+                        </div>
+
+                        <div class="acoes-solicitacao">
+                            <button class="botao-rejeitar" (click)="pararPartilharMidias(usuario)">✖
+                                Parar de partilhar mídias</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- PÁGINA LIVES -->
+    <div class="main-container pagina" [ngClass]="{ 'non-active': abaSeleccionada != 'lives' }">
+        <div class="categorias">
+            <div class="topo-lives">
+                <h2>Lives Atuais</h2>
+                <button class="btn-fazer-live" (click)="abrirVisualizacaoGravacaoLive()">🎥 Fazer Live</button>
+            </div>
+
+            <div *ngIf="livesAtivas.length === 0" class="sem-lives-msg">
+                <p>Nenhuma live no momento 😴</p>
+            </div>
+
+            <div class="lista-usuarios-lives">
+                <div (click)="abrirVisualizacaoLive()" class="usuario-item-live" *ngFor="let live of livesAtivas">
+                    <span class="emoji-live">🔴</span>
+                    <div class="info-usuario-live">
+                        <h4>{{ live.usuario.username }}</h4>
+                        <p>{{ live.titulo }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- PÁGINA ESTAÇÕES DE RÁDIO -->
+    <div class="main-container pagina" [ngClass]="{'non-active': abaSeleccionada != 'estacoesRadio'}">
+        <div class="categorias">
+            <h2>Estações de Rádio</h2>
+
+
+            <div class="lista-estacoes">
+                <div class="estacao-item" *ngFor="let estacao of conjuntoEstacoesRadio" (click)="tocarEstacao(estacao)">
+
+                    <div class="estacao-icone">
+                        <!-- Pode trocar o emoji por <i class="fas fa-broadcast-tower"></i> se preferires -->
+                        📻
+                    </div>
+
+                    <div class="estacao-info">
+                        <h4>{{ estacao.nome }}</h4>
+                        <p>
+                            País: {{ estacao.pais }}
+                        </p>
+                    </div>
+
+                    <div class="estacao-play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Página de Visualização de um Artista -->
+    <!-- Artista Detalhes -->
+    <div class="artista-detalhes" *ngIf="sharedDataService.artistaActual && !isPaginaArtistaFechado">
+
+        <div class="artista-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoArtista()"></i>
+            <strong>Artista</strong>
+        </div>
+
+        <div class="artista-header">
+            <div class="info">
+                <img [src]="getRecursoUrl(sharedDataService.artistaActual.caminhoFoto)" alt="Foto do artista">
+                <div class="textos">
+                    <h2>{{ sharedDataService.artistaActual.nome }}</h2>
+                    <p>{{ sharedDataService.artistaActual.biografia }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Álbuns do Artista -->
+        <div class="categorias">
+            <h2>Álbuns</h2>
+            <div class="list">
+                <div class="item"
+                    *ngFor="let album of pegarAlbunsArtista(sharedDataService.artistaActual , conjuntoAlbuns , conjuntoArtistasAlbuns)"
+                    (click)="abrirVisualizacaoAlbum(album)">
+                    <img [src]="getRecursoUrl(album.caminhoFoto)" />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{ album.titulo }}</h4>
+                    <p>{{ album.descricao }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Músicas do Artista -->
+        <div class="categorias">
+            <h2>Músicas</h2>
+            <div class="list">
+                <div class="item"
+                    *ngFor="let musica of pegarMusicasArtista(sharedDataService.artistaActual , conjuntoMusicas , conjuntoArtistasMusicas); let i = index"
+                    (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                    <img [src]="getRecursoUrl(musica.caminhoFoto)" />
+                    <div class="play">
+                        <span class="fa fa-play"></span>
+                    </div>
+                    <h4>{{ musica.titulo }}</h4>
+
+                    <i *ngIf="verificarSeMusicaVideoPrivados(musica , 'musica')" class="fa fa-lock"
+                        style="color: red; margin-bottom: 10px;" title="Privado"></i>
+
+                    <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(musica , 'musica')" class="fa fa-lock"
+                        style="color: rgb(255, 162, 0); margin-bottom: 10px;" title="Privado"></i>
+
+                    <p>{{ musica.duracao }} | {{ musica.formato }}</p>
+                    <p>Criada por : {{ pegarCriadorMusica(musica , conjuntoMusicas ,
+                        conjuntoCriadoresPostagemMusicas).username }} </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Página Visualização de um Vídeo -->
+    <div class="video-detalhes" *ngIf="sharedDataService.videoActual && !isPaginaVideoFechado">
+
+        <div class="video-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoVideo()"></i>
+            <strong>Vídeo</strong>
+        </div>
+
+        <div class="video-header">
+
+            <div class="video-preview">
+                <video #videoPlayer controls (play)="onVideoPlay()" (pause)="onVideoPause()">
+                    Seu navegador não suporta HTML5.
+                </video>
+            </div>
+
+            <!-- Botões personalizados de avançar e recuar -->
+            <div class="video-custom-controls">
+                <i class="fas fa-backward"></i>
+                <i class="fas" [class.fa-play]="!sharedDataService.videoTocando"
+                    [class.fa-pause]="sharedDataService.videoTocando" (click)="alternarPlayPause('video')">
+                </i>
+                <i class="fas fa-forward"></i>
+            </div>
+
+            <div class="video-info">
+                <h2>{{ sharedDataService.videoActual.titulo }}</h2>
+                <p class="descricao">{{ sharedDataService.videoActual.descricao }}</p>
+
+                <ul class="meta">
+                    <li><strong>Duração:</strong> {{ sharedDataService.duracaoVideo }}</li>
+                    <li><strong>Formato:</strong> {{ sharedDataService.videoActual.formato }}</li>
+                    <li><strong>Tamanho:</strong> {{ sharedDataService.videoActual.tamanho }} MB</li>
+                    <li><strong>Lançamento:</strong> {{ sharedDataService.videoActual.dataLancamento | date:'dd/MM/yyyy'
+                        }}</li>
+                    <li><strong>Autor:</strong> {{ sharedDataService.videoActual.autor }}</li>
+                    <li *ngIf="sharedDataService.videoActual.categoria"><strong>Categoria:</strong> {{
+                        sharedDataService.videoActual.categoria.nome }}</li>
+                    <li *ngIf="sharedDataService.videoActual.musica"><strong>Relacionado com música:</strong> {{
+                        sharedDataService.videoActual.musica.titulo }}</li>
+                </ul>
+
+                <!-- Botão de download -->
+                <div (click)="baixar(sharedDataService.videoActual)" class="download-container">
+                    <button class="botao-download">
+                        <i class="fas fa-download"></i> Baixar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!--Página Visualização de um Álbum-->
+    <div class="album-detalhes" *ngIf="sharedDataService.albumActual && !isPaginaAlbumFechado">
+
+        <div class="album-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoAlbum()"></i>
+            <strong>Álbum</strong>
+        </div>
+
+        <!-- Topo com capa e informações -->
+        <div class="album-header">
+            <div class="album-capa">
+                <img [src]="getRecursoUrl(sharedDataService.albumActual.caminhoFoto)" alt="Capa do Álbum">
+            </div>
+
+            <div class="album-info">
+                <h2>{{ sharedDataService.albumActual.titulo }}</h2>
+                <p class="descricao">{{ sharedDataService.albumActual.descricao }}</p>
+                <p class="data-lancamento"><strong>Lançamento:</strong> {{ sharedDataService.albumActual.dataLancamento
+                    | date:
+                    'dd/MM/yyyy' }}</p>
+                <p class="data-lancamento"><strong>Criado por:</strong> {{
+                    sharedDataService.albumActual.utilizador.username }}</p>
+
+                <p class="data-lancamento"> <strong>Artistas :</strong>
+                    <span
+                        *ngFor="let artistaAlbum of pegarArtistasAlbum(sharedDataService.albumActual , conjuntoAlbuns ,conjuntoArtistasAlbuns ) ; let last = last">
+                        {{ artistaAlbum.nome }}<span *ngIf="!last">, </span>
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Lista de músicas -->
+        <div class="lista-musicas">
+            <h3>Faixas</h3>
+            <div class="musica-item" *ngFor="let musica of sharedDataService.musicasAlbumActual ; let i = index"
+                (click)="rodarMusica(musica , pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                <img class="musica-foto" [src]="getRecursoUrl(musica.caminhoFoto)" alt="Foto da música">
+                <div class="musica-info">
+                    <h4>{{ musica.titulo }}</h4>
+                    <p>{{ musica.duracao }} | {{ musica.formato }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Página Visualização de um Grupo -->
+    <div class="grupo-detalhes" *ngIf="sharedDataService.grupoActual && !isPaginaGrupoFechado">
+
+        <div class="grupo-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoGrupo()"></i>
+            <strong>Grupo</strong>
+        </div>
+
+
+        <!-- Topo com ícone e informações -->
+        <div class="grupo-header">
+            <div class="grupo-icone">
+                <span class="emoji-grupo">🏘️</span>
+            </div>
+
+            <div class="grupo-info">
+                <h2>{{ sharedDataService.grupoActual.nome }}</h2>
+                <p class="descricao">{{ sharedDataService.grupoActual.descricao }}</p>
+                <p class="data-lancamento"><strong>Criado por:</strong> {{
+                    sharedDataService.grupoActual.utilizador.username }}</p>
+            </div>
+
+            <div class="grupo-acoes" *ngIf="verificarSeUsuarioOwnerGrupoActual()">
+                <button (click)="abrirModalAdicionarUsuarioGrupo()" class="botao-ver-conteudo">
+                    ➕ Adicionar Usuários ao Grupo
+                </button>
+            </div>
+
+            @if (verificarSeUsuarioEstaNoGrupo(sharedDataService.grupoActual.id)) {
+
+            <div class="grupo-acoes">
+                <button (click)="abrirVisualizacaoConteudoGrupo(sharedDataService.grupoActual)"
+                    class="botao-ver-conteudo">
+                    📁 Ver conteúdos do grupo
+                </button>
+            </div>
+
+            } @else if(verificarSeUsuarioTemPedidoPendenteGrupo(sharedDataService.grupoActual.id ,
+            sharedDataService.usuarioLogado)) {
+
+            <div class="grupo-acoes">
+                <button (click)="removerSolicitarAdesaoGrupo()" class="botao-ver-conteudo cancelar-pedido">
+                    ❌ Cancelar pedido de adesão ao grupo
+                </button>
+            </div>
+
+            } @else{
+
+            <div class="grupo-acoes">
+                <button (click)="solicitarAdesaoGrupo()" class="botao-ver-conteudo">
+                    ✉️ Solicitar pedido de adesão ao grupo
+                </button>
+            </div>
+            }
+
+        </div>
+
+
+
+        <!-- Lista de usuários -->
+        <div class="lista-usuarios">
+            <h3>Usuários do Grupo</h3>
+            <div class="usuario-item" *ngFor="let membroGrupo of sharedDataService.utilizadoresGrupoActual">
+                <span class="emoji-usuario">👤</span>
+
+                <div class="usuario-info">
+                    <h4>{{ membroGrupo.utilizador.username }}</h4>
+                    <p>{{ membroGrupo.utilizador.nome }} ({{(membroGrupo.papel == 1) ? "Membro Normal" :
+                        (membroGrupo.papel == 2) ? "Editor" : "Owner"}})</p>
+                </div>
+
+                <div *ngIf="verificarSeUsuarioOwnerGrupoActual() && (membroGrupo.utilizador.id != sharedDataService.usuarioLogado.id ) && (membroGrupo.utilizador.id != membroGrupo.grupo.utilizador.id)"
+                    class="acoes-solicitacao">
+
+                    <button (click)="rejeitarSolicitacaoGrupo(membroGrupo)" class="acao-icone remover" title="Remover">
+                        <i class="fas fa-user-times"></i>
+                    </button>
+
+                    <button (click)="promoverUsuario(membroGrupo , 'normal')" class="acao-icone promover-normal"
+                        title="Promover a membro normal">
+                        <i class="fas fa-user"></i>
+                    </button>
+
+                    <button (click)="promoverUsuario(membroGrupo , 'editor')" class="acao-icone promover-editor"
+                        title="Promover a editor">
+                        <i class="fas fa-pen-nib"></i>
+                    </button>
+
+                    <button (click)="promoverUsuario(membroGrupo , 'owner')" class="acao-icone promover-owner"
+                        title="Promover a owner">
+                        <i class="fas fa-crown"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Lista de Pedidos Pendentes -->
+        <div *ngIf="verificarSeUsuarioOwnerGrupoActual() && sharedDataService.grupoActual.publico"
+            class="lista-solicitacoes">
+            <h3>Solicitações Pendentes</h3>
+
+            <div class="usuario-item" *ngFor="let membroGrupo of sharedDataService.utilizadoresPendentesGrupoActual">
+                <span class="emoji-usuario">📨</span>
+                <div class="usuario-info">
+                    <h4>{{ membroGrupo.utilizador.username }}</h4>
+                    <p>{{ membroGrupo.utilizador.nome }}</p>
+                </div>
+
+                <div class="acoes-solicitacao">
+                    <button class="botao-aceitar" (click)="aceitarSolicitacaoGrupo(membroGrupo)">✔ Aceitar</button>
+                    <button class="botao-rejeitar" (click)="rejeitarSolicitacaoGrupo(membroGrupo)">✖ Rejeitar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Página Visualização do Conteúdo de um Grupo -->
+    <div class="conteudo-grupo-detalhes pagina" *ngIf="sharedDataService.grupoActual && !isPaginaConteudoGrupoFechado">
+
+        <div class="grupo-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoConteudoGrupo()"></i>
+            <strong>Conteúdo do Grupo</strong>
+        </div>
+
+        <div class="categorias">
+            <h2>Conteúdos do Grupo : {{ sharedDataService.grupoActual.nome }}</h2>
+
+            <div *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual() || sharedDataService.grupoActual.id == 1"
+                class="botoes-acoes-grupo">
+                <button class="botao-adicionar" (click)="abrirModalAdicionarMusica()">+ Adicionar Música</button>
+                <button class="botao-adicionar" (click)="abrirModalAdicionarVideo()">+ Adicionar Vídeo</button>
+            </div>
+
+            <div>
+                <h3>Músicas</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let musica of sharedDataService.musicasGrupoActual; let i = index">
+
+                        <img [src]="getRecursoUrl(musica.caminhoFoto)" />
+                        <div class="play">
+
+                            <div *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual()">
+
+                                <span (click)="abrirModalEditarMusica(musica)" class="fa fa-pencil da"></span>
+                                <span class="fa fa-trash delete-icon"></span>
+                            </div>
+
+                            <span
+                                (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))"
+                                class="fa fa-play"></span>
+                        </div>
+
+                        <h4>{{ musica.titulo }}</h4>
+                        <p>
+                            Criada por: {{ pegarCriadorMusica(musica , conjuntoMusicas ,
+                            conjuntoCriadoresPostagemMusicas).username }} |
+                            Artistas:
+                            <span
+                                *ngFor="let artista of pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
+                                {{ artista.nome }}<span *ngIf="!last">, </span>
+                            </span>
+
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div>
+                <h3>Vídeos</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let video of sharedDataService.videosGrupoActual">
+
+                        <img [src]="getRecursoUrl(video.caminhoFoto)" />
+
+                        <div class="play">
+
+
+                            <div *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual()">
+                                <span (click)="abrirModalEditarVideo(video)" class="fa fa-pencil da"></span>
+                                <span class="fa fa-trash delete-icon"></span>
+                            </div>
+
+                            <span (click)="rodarVideo(video)" class="fa fa-play"></span>
+                        </div>
+
+                        <h4>{{ video.titulo }}</h4>
+                        <p>
+                            Criado por: {{ pegarCriadorVideo(video , conjuntoVideos ,
+                            conjuntoCriadoresPostagemVideos).username}} |
+                            {{ video.descricao }}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Página Visualização do Conteúdo Compartilhado por um Usuário -->
+    <div class="conteudo-midias-compartilhadas-detalhes pagina"
+        *ngIf="sharedDataService.utilizadorActual && !isPaginaConteudoMidiasCompartilhadasFechado">
+
+        <div class="grupo-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoConteudoMidiasCompartilhadas()"></i>
+            <strong>Mídias de {{ sharedDataService.utilizadorActual.username }}</strong>
+        </div>
+
+        <div class="categorias">
+            <h2>Mídias compartilhadas</h2>
+
+            <div>
+                <h3>Músicas</h3>
+
+                <div class="list">
+                    <div class="item"
+                        *ngFor="let meuCarregado of sharedDataService.musicasCompartilhadas; let i = index">
+
+                        <img [src]="getRecursoUrl(meuCarregado.musica.caminhoFoto)" />
+                        <div class="play">
+                            <span
+                                (click)="rodarMusica(meuCarregado.musica, pegarArtistasMusica(meuCarregado.musica , conjuntoMusicas , conjuntoArtistasMusicas))"
+                                class="fa fa-play"></span>
+                            <span (click)="abrirModalEditarMusica(meuCarregado.musica)" class="fa fa-pencil da"></span>
+                            <span class="fa fa-trash delete-icon"></span>
+                        </div>
+
+
+                        <h4>{{ meuCarregado.musica.titulo }}</h4>
+                        <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(meuCarregado.musica , 'musica')"
+                            class="fa fa-lock" style="color: rgb(255, 162, 0); margin-bottom: 10px;"
+                            title="Privado"></i>
+                        <p>
+                            Criada por: {{ pegarCriadorMusica(meuCarregado.musica , conjuntoMusicas ,
+                            conjuntoCriadoresPostagemMusicas).username }} |
+                            Artistas:
+                            <span
+                                *ngFor="let artista of pegarArtistasMusica(meuCarregado.musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
+                                {{ artista.nome }}<span *ngIf="!last">, </span>
+                            </span>
+                        </p>
+
+                        <p class="criadoDirectamenteGrupo"
+                            *ngIf="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'musica')">
+                            <span>Criada
+                                directamente no grupo {{
+                                verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'musica')!.nome }}
+                            </span>
+                        </p>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3>Vídeos</h3>
+
+                <div class="list">
+                    <div class="item" *ngFor="let meuCarregado of sharedDataService.videosCompartilhados">
+
+                        <img [src]="getRecursoUrl(meuCarregado.video.caminhoFoto)" />
+
+                        <div class="play">
+                            <span (click)="rodarVideo(meuCarregado.video)" class="fa fa-play"></span>
+                            <span (click)="abrirModalEditarVideo(meuCarregado.video)" class="fa fa-pencil da"></span>
+                            <span class="fa fa-trash delete-icon"></span>
+                        </div>
+
+                        <h4>{{ meuCarregado.video.titulo }}</h4>
+                        <i *ngIf=" verificarSeMusicaVideoCompartilhadosPrivados(meuCarregado.video , 'video')"
+                            class="fa fa-lock" style="color: rgb(255, 162, 0); margin-bottom: 10px;"
+                            title="Privado"></i>
+                        <p>
+                            Criado por: {{ pegarCriadorVideo(meuCarregado.video , conjuntoVideos ,
+                            conjuntoCriadoresPostagemVideos).username}} |
+                            {{ meuCarregado.video.descricao }}
+                        </p>
+
+                        <p class="criadoDirectamenteGrupo"
+                            *ngIf="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'video') as grupo">
+                            <span>
+                                Criada directamente no grupo {{ grupo.nome }}
+                            </span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Página Visualização de uma Playlist -->
+    <div class="playlist-detalhes" *ngIf="sharedDataService.playlistActual && !isPaginaPlaylistFechada">
+
+        <div class="playlist-detalhes-header">
+            <i class="fas fa-arrow-left" (click)="fecharVisualizacaoPlaylist()"></i>
+            <strong>Playlist</strong>
+        </div>
+
+        <!-- Topo com ícone e informações -->
+        <div class="playlist-header">
+            <div class="playlist-icone">
+                <span class="emoji-playlist">🎵</span>
+            </div>
+
+            <div class="playlist-info">
+                <h2>{{ sharedDataService.playlistActual.titulo }}</h2>
+                <p class="data-criacao"><strong>Criada por:</strong> {{
+                    sharedDataService.playlistActual.utilizador.username }}</p>
+                <p class="privacidade">
+                    <strong>Privacidade:</strong> {{ sharedDataService.playlistActual.privada ? 'Privada' : 'Pública' }}
+                </p>
+            </div>
+
+            <div class="playlist-acoes">
+                <button (click)=" abrirModalAdicionarMusicaPlaylist()" class="botao-acoes-playlist adicionar-musica">
+                    <i class="fas fa-plus"></i> Adicionar música
+                </button>
+
+                <button (click)="tornarPlaylistPrivadaPublica()" class="botao-acoes-playlist alterar-privacidade">
+                    <i class="fas"
+                        [ngClass]="sharedDataService.playlistActual.privada ? 'fa-lock-open' : 'fa-lock'"></i>
+                    {{ sharedDataService.playlistActual.privada ? 'Tornar pública' : 'Tornar privada' }}
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Lista de músicas da playlist -->
+        <div class="lista-musicas playlist-espaco-lista">
+            <h3>Músicas na Playlist</h3>
+            <div class="musica-item" *ngFor="let musica of sharedDataService.musicasPlaylistActual"
+                (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                <img [src]="getRecursoUrl(musica.caminhoFoto)" class="musica-foto" />
+                <div class="musica-info">
+                    <h4>{{ musica.titulo }}</h4>
+                    <p>{{ pegarCriadorMusica(musica , conjuntoMusicas , conjuntoCriadoresPostagemMusicas).username }} |
+                        Artistas:
+                        <span
+                            *ngFor="let artista of pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
+                            {{ artista.nome }}<span *ngIf="!last">, </span>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página de Visualização de Live -->
+    <div class="pagina-live" *ngIf="!isPaginaLiveFechado">
+
+        <div class="live-header">
+            <i (click)="fecharVisualizacaoLive()" class="fas fa-arrow-left"></i>
+            <strong>Live</strong>
+        </div>
+
+        <!-- Conteúdo da live com vídeo e informações abaixo -->
+        <div class="live-conteudo">
+
+            <!-- Vídeo -->
+            <div class="live-video">
+                <video #videoPlayer controls autoplay>
+                    <source [src]="liveActual.caminhoVideo" type="application/x-mpegURL" />
+                    Seu navegador não suporta a reprodução de vídeo.
+                </video>
+            </div>
+
+            <!-- Informações da live -->
+            <div class="live-info">
+                <div class="status-ao-vivo">
+                    <span class="ponto-vermelho"></span>
+                    <span class="texto-ao-vivo">AO VIVO</span>
+                </div>
+
+                <h2>{{ liveActual.titulo }}</h2>
+                <p class="descricao">{{ liveActual.descricao }}</p>
+                <p class="data"><strong>Iniciada por:</strong> {{ liveActual.utilizador.username }}</p>
+                <p class="data"><strong>Data:</strong> {{ liveActual.dataInicio }}</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Página de Visualização da Gravação da Live -->
+    <div class="pagina-live" *ngIf="!isPaginaGravacaoLiveFechado">
+
+        <div class="live-header">
+            <i (click)="fecharVisualizacaoGravacaoLive()" class="fas fa-arrow-left"></i>
+            <strong>Transmitir ao Vivo</strong>
+        </div>
+
+        <div class="live-conteudo">
+
+            <!-- Vídeo local da câmera -->
+            <div class="live-video">
+                <video #previewVideo autoplay muted playsinline></video>
+            </div>
+
+            <!-- Informações da live -->
+            <div class="live-info">
+                <div class="status-ao-vivo">
+                    <span class="ponto-vermelho"></span>
+                    <span class="texto-ao-vivo">TRANSMITINDO</span>
+                </div>
+
+                <h2>{{ liveActual.titulo }}</h2>
+                <p class="descricao">{{ liveActual.descricao }}</p>
+                <p class="data"><strong>Transmitido por:</strong> {{ liveActual.utilizador.username }}</p>
+                <p class="data"><strong>Início:</strong> 23/08/12</p>
+
+                <!-- Botões -->
+                <button class="btn-transmitir" (click)="iniciarLive()">Iniciar
+                    Transmissão</button>
+                <button class="btn-parar">Encerrar
+                    Transmissão</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL ADICIONAR ÁLBUM -->
+    <div class="modal-overlay" *ngIf="isModalAlbumAberto">
+        <div class="modal">
+            <i class="fas fa-times close" (click)="fecharModalAdicionarAlbum()"></i>
+            <h2>Adicionar Álbum</h2>
+
+            <label>Título:</label>
+            <input [(ngModel)]="novoTituloAlbum" placeholder="Título do álbum" />
+
+            <label>Descrição:</label>
+            <textarea [(ngModel)]="novaDescricaoAlbum" placeholder="Descrição do álbum"></textarea>
+
+            <label>Data de Lançamento:</label>
+            <input type="date" [(ngModel)]="novaDataLancamentoAlbum" />
+
+            <label>Adicionar Artistas:</label>
+            <select [(ngModel)]="artistaSelecionado" (change)="adicionarArtista()">
+                <option [ngValue]="null" disabled selected>Selecione um artista</option>
+                <option *ngFor="let artista of conjuntoArtistasDisponiveis" [ngValue]="artista">
+                    {{ artista.nome }}
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoArtistasSelecionados.length > 0">
+                <span class="artista-item" *ngFor="let artista of conjuntoArtistasSelecionados">
+                    {{ artista.nome }}
+                    <span class="remover-artista" (click)="removerArtista(artista)">&#10005;</span>
+                </span>
+            </div>
+
+            <button class="criar-artista-btn" (click)="abrirModalAdicionarArtista()">
+                + Criar Artista
+            </button>
+
+
+            <label>Adicionar Musicas:</label>
+            <select [(ngModel)]="musicaSelecionada" (change)="adicionarMusica()">
+                <option [ngValue]="null" disabled selected>Selecione uma música</option>
+                <option *ngFor="let musica of conjuntoMusicasDisponiveis" [ngValue]="musica">
+                    {{ musica.titulo }} -
+                    <span
+                        *ngFor="let artista of pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
+                        {{ artista.nome }}<span *ngIf="!last">, </span>
+                    </span>
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoMusicasSelecionadas.length > 0">
+                <span class="artista-item" *ngFor="let musica of conjuntoMusicasSelecionadas">
+                    {{ musica.titulo }}
+                    <span class="remover-artista" (click)="removerMusica(musica)">&#10005;</span>
+                </span>
+            </div>
+
+            <button class="criar-artista-btn" (click)="abrirModalAdicionarMusica()">
+                + Criar Música
+            </button>
+
+            <label>Capa:</label>
+            <input type="file" (change)="onCapaSelecionada($event)" />
+
+            <button (click)="salvarNovoAlbum()">Salvar</button>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAR MÚSICA -->
+    <div class="modal-overlay" *ngIf="isModalMusicaAberta">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalAdicionarMusica()"></i>
+            <h2>Adicionar Música</h2>
+
+            <label>Título:</label>
+            <input [(ngModel)]="novoTituloMusica" placeholder="Título da música" />
+
+            <label>Letra:</label>
+            <textarea [(ngModel)]="novaLetraMusica" placeholder="Letra da música"></textarea>
+
+            <label>Data de Lançamento:</label>
+            <input type="date" [(ngModel)]="novaDataLancamentoMusica" />
+
+            <label>Categoria:</label>
+            <select [(ngModel)]="novaCategoriaSelecionadaMusica">
+                <option [ngValue]="null" disabled selected>Selecione uma categoria</option>
+                <option *ngFor="let categoria of conjuntoCategoriasMusicasSistema" [ngValue]="categoria">
+                    {{ categoria.nome }}
+                </option>
+            </select>
+
+            <label>Adicionar Artistas:</label>
+            <select [(ngModel)]="artistaSelecionado" (change)="adicionarArtista()">
+                <option [ngValue]="null" disabled selected>Selecione um artista</option>
+                <option *ngFor="let artista of conjuntoArtistasDisponiveis" [ngValue]="artista">
+                    {{ artista.nome }}
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoArtistasSelecionados.length > 0">
+                <span class="artista-item" *ngFor="let artista of conjuntoArtistasSelecionados">
+                    {{ artista.nome }}
+                    <span class="remover-artista" (click)="removerArtista(artista)">&#10005;</span>
+                </span>
+            </div>
+
+            <button class="criar-artista-btn" (click)="abrirModalAdicionarArtista()">+ Criar Artista</button>
+
+            <label>Arquivo de Música:</label>
+            <input type="file" (change)="onMusicaSelecionada($event)" />
+
+            <label>Capa da Música (Opcional):</label>
+            <input type="file" (change)="onCapaMusicaSelecionada($event)" />
+
+            <button
+                (click)="salvarNovaMusica( ( (abaSeleccionada === 'midiasCarregados') && (isModalAlbumAberto) ) ? false : (abaSeleccionada === 'midiasCarregados') ? true : false )">Salvar</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL PARTILHAR CONTEÚDO COM GRUPOS -->
+    <div class="modal-overlay" *ngIf="isModalPartilharConteudoAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalPartilharConteudo()"></i>
+            <h2>Partilhar Conteúdo</h2>
+
+            <label>Seleccionar grupos:</label>
+            <select [(ngModel)]="grupoSelecionado" (change)="adicionarGrupo()">
+                <option [ngValue]="null" disabled selected>Selecione um grupo</option>
+                <option *ngFor="let grupo of conjuntoGruposDisponiveis" [ngValue]="grupo">
+                    {{ grupo.nome }} - {{ grupo.descricao }}
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoGruposSelecionados.length > 0">
+                <span class="artista-item" *ngFor="let grupo of conjuntoGruposSelecionados">
+                    {{ grupo.nome }}
+                    <span class="remover-artista" (click)="removerGrupo(grupo)">&#10005;</span>
+                </span>
+            </div>
+
+            <button (click)="partilharConteudoComGrupos()">Partilhar Conteúdo</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL ADICIONAR VÍDEO -->
+    <div class="modal-overlay" *ngIf="isModalVideoAberta">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalAdicionarVideo()"></i>
+            <h2>Adicionar Vídeo</h2>
+
+            <label>Título:</label>
+            <input [(ngModel)]="novoTituloVideo" placeholder="Título do vídeo" />
+
+            <label>Autor:</label>
+            <input [(ngModel)]="novoAutorVideo" placeholder="Autor do vídeo" />
+
+            <label>Descrição:</label>
+            <textarea [(ngModel)]="novaDescricaoVideo" placeholder="Descrição do vídeo"></textarea>
+
+            <label>Data de Lançamento:</label>
+            <input type="date" [(ngModel)]="novaDataLancamentoVideo" />
+
+            <label>Categoria:</label>
+            <select [(ngModel)]="novaCategoriaSelecionadaVideo">
+                <option [ngValue]="null" disabled selected>Selecione uma categoria</option>
+                <option *ngFor="let categoria of conjuntoCategoriasVideosSistema" [ngValue]="categoria">
+                    {{ categoria.nome }}
+                </option>
+            </select>
+
+            <label>Arquivo de Vídeo:</label>
+            <input type="file" (change)="onVideoSelecionado($event)" />
+
+            <label>Capa do Vídeo (Opcional):</label>
+            <input type="file" (change)="onCapaVideoSelecionado($event)" />
+
+            <button (click)="salvarNovoVideo( (abaSeleccionada === 'midiasCarregados') ? true : false )">Salvar</button>
+        </div>
+    </div>
+
+
+    <!--MODAL ADICIONAR ARTISTA-->
+    <div class="modal-overlay" *ngIf="isModalArtistaAberta">
+        <div class="modal">
+            <i class="fas fa-times close" (click)="fecharModalAdicionarArtista()"></i>
+            <h2>Adicionar Artista</h2>
+
+            <label>Nome:</label>
+            <input [(ngModel)]="novoArtista.nome" placeholder="Nome do artista" />
+
+            <label>Biografia:</label>
+            <textarea [(ngModel)]="novoArtista.biografia" placeholder="Biografia"></textarea>
+
+            <label>Foto:</label>
+            <input type="file" (change)="onFileSelected($event)" />
+
+            <button (click)="salvarNovoArtista()">Salvar</button>
+        </div>
+    </div>
+
+    <!--MODAL ADICIONAR GRUPO-->
+    <div class="modal-overlay" *ngIf="isModalGrupoAberta">
+        <div class="modal">
+            <i class="fas fa-times close" (click)="fecharModalAdicionarGrupo()"></i>
+            <h2>Adicionar Grupo</h2>
+
+            <label>Nome:</label>
+            <input [(ngModel)]="novoGrupo.nome" placeholder="Nome do grupo" />
+
+            <label>Descrição:</label>
+            <textarea [(ngModel)]="novoGrupo.descricao" placeholder="Descrição"></textarea>
+
+            <label>Tipo de grupo:</label>
+            <select [(ngModel)]="tipoGrupo">
+                <option value="publico">Público</option>
+                <option value="privado">Privado</option>
+            </select>
+
+            <button (click)="salvarNovoGrupo()">Salvar</button>
+        </div>
+    </div>
+
+    <!--MODAL ADICIONAR PLAYLIST-->
+    <div class="modal-overlay" *ngIf="isModalPlaylistAberta">
+        <div class="modal">
+            <i class="fas fa-times close" (click)="fecharModalAdicionarPlaylist()"></i>
+            <h2>Adicionar Playlist</h2>
+
+            <label>Nome:</label>
+            <input [(ngModel)]="novaPlaylist.titulo" placeholder="Nome da Playlist" />
+
+            <button (click)="salvarNovaPlaylist()">Salvar</button>
+        </div>
+    </div>
+
+    <!-- MODAL ADICIONAR USUÁRIO AO GRUPO -->
+    <div class="modal-overlay" *ngIf="isModalAdicionarUsuarioGrupoAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalAdicionarUsuarioGrupo()"></i>
+            <h2>Adicionar Usuários</h2>
+
+            <label>Seleccionar usuários:</label>
+            <select [(ngModel)]="usuarioSelecionado" (change)="adicionarUsuario()">
+                <option [ngValue]="null" disabled selected>Selecione um usuário</option>
+                <option *ngFor="let usuario of conjuntoUsuariosNaoEstaoGrupo" [ngValue]="usuario">
+                    {{ usuario.username }} - {{ usuario.nome }}
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoUsuariosSelecionados.length > 0">
+                <span class="artista-item" *ngFor="let usuario of conjuntoUsuariosSelecionados">
+                    {{ usuario.username }}
+                    <span class="remover-artista" (click)="removerUsuario(usuario)">&#10005;</span>
+                </span>
+            </div>
+
+            <button (click)="salvarUsuariosAoGrupo()">Salvar</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL COMPARTILHAR MINHAS MÍDIAS COM USUÁRIOS -->
+    <div class="modal-overlay" *ngIf="isModalCompartilharMidiasUsuarioAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalCompartilharMidiasUsuario()"></i>
+            <h2>Adicionar Usuários</h2>
+
+            <label>Seleccionar usuários:</label>
+            <select [(ngModel)]="usuarioSelecionadoCompartilhar" (change)="adicionarUsuarioCompartilhar()">
+                <option [ngValue]="null" disabled selected>Selecione um usuário</option>
+                <option *ngFor="let usuario of conjuntoUsuariosCompartilhar" [ngValue]="usuario">
+                    {{ usuario.username }} - {{ usuario.nome }}
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoUsuariosSelecionadosCompartilhar.length > 0">
+                <span class="artista-item" *ngFor="let usuario of conjuntoUsuariosSelecionadosCompartilhar">
+                    {{ usuario.username }}
+                    <span class="remover-artista" (click)="removerUsuarioCompartilhar(usuario)">&#10005;</span>
+                </span>
+            </div>
+
+            <button (click)="compartilharMidiasUsuario()">Salvar</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL ADICIONAR MÚSICA À PLAYLIST -->
+    <div class="modal-overlay" *ngIf="isModalAdicionarMusicaPlaylistAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalAdicionarMusicaPlaylist()"></i>
+            <h2>Adicionar Músicas</h2>
+
+            <label>Seleccionar Musicas:</label>
+            <select [(ngModel)]="musicaSelecionadaParaPlaylist" (change)="adicionarMusicaParaPlaylist()">
+                <option [ngValue]="null" disabled selected>Selecione uma música</option>
+                <option *ngFor="let musica of conjuntoMusicasDisponiveisParaPlaylist" [ngValue]="musica">
+                    {{ musica.titulo }} -
+                    <span
+                        *ngFor="let artista of pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
+                        {{ artista.nome }}<span *ngIf="!last">, </span>
+                    </span>
+                </option>
+            </select>
+
+            <div class="artistas-selecionados" *ngIf="conjuntoMusicasSelecionadasParaPlaylist.length > 0">
+                <span class="artista-item" *ngFor="let musica of conjuntoMusicasSelecionadasParaPlaylist">
+                    {{ musica.titulo }}
+                    <span class="remover-artista" (click)="removerMusicaParaPlaylist(musica)">&#10005;</span>
+                </span>
+            </div>
+
+            <button (click)="salvarMusicasAPlaylist()">Salvar</button>
+        </div>
+    </div>
+
+
+
+    <!-- MODAL EDITAR ÁLBUM -->
+    <div class="modal-overlay" *ngIf="isModalEditarAlbumAberto">
+        <div class="modal">
+            <i class="fas fa-times close" (click)="fecharModalEditarAlbum()"></i>
+            <h2>Editar Álbum</h2>
+
+            <label>Título:</label>
+            <input [(ngModel)]="novoTituloAlbum" placeholder="Título do álbum" />
+
+            <label>Descrição:</label>
+            <textarea [(ngModel)]="novaDescricaoAlbum" placeholder="Descrição do álbum"></textarea>
+
+            <label>Data de Lançamento:</label>
+            <input type="date" [(ngModel)]="novaDataLancamentoAlbum" />
+
+            <label>Capa:</label>
+            <input type="file" (change)="onCapaSelecionada($event)" />
+
+            <button (click)="editarNovoAlbum()">Editar</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR MÚSICA -->
+    <div class="modal-overlay" *ngIf="isModalEditarMusicaAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalEditarMusica()"></i>
+            <h2>Editar Música</h2>
+
+            <label>Título:</label>
+            <input [(ngModel)]="novoTituloMusica" placeholder="Título da música" />
+
+            <label>Letra:</label>
+            <textarea [(ngModel)]="novaLetraMusica" placeholder="Letra da música"></textarea>
+
+            <label>Data de Lançamento:</label>
+            <input type="date" [(ngModel)]="novaDataLancamentoMusica" />
+
+            <label>Categoria:</label>
+            <select [(ngModel)]="novaCategoriaSelecionadaMusica">
+                <option *ngFor="let categoria of conjuntoCategoriasMusicasSistema" [ngValue]="categoria">
+                    {{ categoria.nome }}
+                </option>
+            </select>
+
+            <label>Capa da Música (Opcional):</label>
+            <input type="file" (change)="onCapaMusicaSelecionada($event)" />
+
+            <button (click)="editarNovaMusica()">Editar</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR VÍDEO -->
+    <div class="modal-overlay" *ngIf="isModalEditarVideoAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalEditarVideo()"></i>
+            <h2>Editar Vídeo</h2>
+
+            <label>Título:</label>
+            <input [(ngModel)]="novoTituloVideo" placeholder="Título do vídeo" />
+
+            <label>Autor:</label>
+            <input [(ngModel)]="novoAutorVideo" placeholder="Autor do vídeo" />
+
+            <label>Descrição:</label>
+            <textarea [(ngModel)]="novaDescricaoVideo" placeholder="Descrição do vídeo"></textarea>
+
+            <label>Data de Lançamento:</label>
+            <input type="date" [(ngModel)]="novaDataLancamentoVideo" />
+
+            <label>Categoria:</label>
+            <select [(ngModel)]="novaCategoriaSelecionadaVideo">
+                <option [ngValue]="null" disabled selected>Selecione uma categoria</option>
+                <option *ngFor="let categoria of conjuntoCategoriasVideosSistema" [ngValue]="categoria">
+                    {{ categoria.nome }}
+                </option>
+            </select>
+
+            <label>Capa do Vídeo (Opcional):</label>
+            <input type="file" (change)="onCapaVideoSelecionado($event)" />
+
+            <button (click)="editarNovoVideo()">Salvar</button>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDITAR ARTISTA -->
+    <div class="modal-overlay" *ngIf="isModalEditarArtistaAberto">
+        <div class="modal">
+
+            <i class="fas fa-times close" (click)="fecharModalEditarArtista()"></i>
+            <h2>Editar Artista</h2>
+
+            <label>Nome:</label>
+            <input [(ngModel)]="novoNomeArtista" placeholder="Nome do Artista" />
+
+            <label>Biografia:</label>
+            <input [(ngModel)]="novaBiografia" placeholder="Biografia do Artista" />
+
+            <button (click)="editarNovoArtista()">Salvar</button>
+        </div>
+    </div>
+
+
+    <!--REPRODUTOR DE MÚSICA MAXIMIZADO-->
+    <div class="music-player-expanded" *ngIf="sharedDataService.musicaActual && !isReprodutorMaximizadoFechado">
+
+        <div class="expanded-header">
+            <i class="fas fa-arrow-left" (click)="abrirFecharReprodutorMaximizado()"></i>
+            <strong>Agora tocando</strong>
+        </div>
+
+        <div class="expanded-body">
+
+            <div class="expanded-top">
+                <div class="expanded-cover">
+                    <img [src]="getRecursoUrl(sharedDataService.musicaActual.caminhoFoto)" alt="Capa da música">
+                </div>
+
+                <div class="expanded-info">
+                    <h2>{{ sharedDataService.musicaActual.titulo }}</h2>
+
+                    <p class="expanded-artists">
+                        <span *ngFor="let artista of sharedDataService.artistasMusicaActual; let last = last">
+                            {{ artista.nome }}<span *ngIf="!last">, </span>
+                        </span>
+                    </p>
+
+                    <ul class="expanded-meta">
+                        <li><strong>Criada por:</strong> {{
+                            pegarCriadorMusica(sharedDataService.musicaActual , conjuntoMusicas ,
+                            conjuntoCriadoresPostagemMusicas).username}}</li>
+                        <li><strong>Duração:</strong> {{ sharedDataService.duracao }}</li>
+                        <li><strong>Formato:</strong> {{ sharedDataService.musicaActual.formato }}</li>
+                        <li><strong>Tamanho:</strong> {{ sharedDataService.musicaActual.tamanho }} MB</li>
+                        <li><strong>Lançamento:</strong> {{ sharedDataService.musicaActual.dataLancamento |
+                            date:'dd/MM/yyyy' }}</li>
+                    </ul>
+
+                    <!-- Botão de download -->
+                    <div (click)="baixar(sharedDataService.musicaActual)" class="download-container">
+                        <button class="botao-download">
+                            <i class="fas fa-download"></i> Baixar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="expanded-lyrics">
+                <h3>Letra</h3>
+                <pre>{{ letraMusica }}</pre>
+            </div>
+
+        </div>
+
+
+        <div class="progress-controller">
+            <div class="control-buttons">
+                <i class="fas fa-step-backward"></i>
+                <i class="play-pause fas" [class.fa-pause]="sharedDataService.tocando"
+                    [class.fa-play]="!sharedDataService.tocando" (click)="alternarPlayPause('audio')"></i>
+                <i class="fas fa-step-forward"></i>
+            </div>
+
+            <div class="progress-container">
+                <span>{{sharedDataService.tempoAtual}}</span>
+                <div class="progress-bar" (click)="irParaTempo($event , 'audio')">
+                    <div class="buffered" [ngStyle]="{ 'width': sharedDataService.progressoBuffer + '%' }"></div>
+                    <div class="progress" [ngStyle]="{ 'width': sharedDataService.progressoPercentual + '%' }">
+                    </div>
+                </div>
+                <span>{{sharedDataService.duracao}}</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MINI PLAYER FIXO DE RÁDIO -->
+    <div class="radio-player" *ngIf="sharedDataService.estacaoRadioActual">
+        <div class="radio-player-info">
+            <div class="icone-radio">📻</div>
+            <div>
+                <h4>{{ sharedDataService.estacaoRadioActual.nome }}</h4>
+                <p>{{ sharedDataService.estacaoRadioActual.pais }}</p>
+            </div>
+        </div>
+
+        <div class="radio-player-controles">
+            <button (click)="pausarOuTocarEstacao()">
+                <i class="fas"
+                    [ngClass]="{ 'fa-pause': sharedDataService.radioTocando, 'fa-play': !sharedDataService.radioTocando }"></i>
+            </button>
+            <button (click)="fecharEstacaoAtual()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+    </div>
+
+
+    <!--REPRODUTOR DE MÚSICA MINIMIZADO-->
+    <div class="music-player" *ngIf="sharedDataService.musicaActual && !isReprodutorFechado">
+
+        <audio #audioPlayer (timeupdate)="atualizarProgresso('audio')" (loadedmetadata)="definirDuracao('audio')">
+            O seu navegador não suporta áudio HTML5.
+        </audio>
+
+        <i class="fas fa-xmark close-player" (click)="abrirFecharReprodutorMusica()"></i>
+
+        <div class="song-bar">
+            <div class="song-infos">
+                <div class="image-container">
+                    <img [src]="getRecursoUrl(sharedDataService.musicaActual.caminhoFoto)" alt="" />
+                </div>
+                <div class="song-description">
+                    <p class="title">
+                        {{sharedDataService.musicaActual.titulo}}
+                    </p>
+                    <p class="artist">
+
+                        <span *ngFor="let artistaMusica of sharedDataService.artistasMusicaActual ; let last = last">
+                            {{ artistaMusica.nome }}<span *ngIf="!last">, </span>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-controller">
+            <div class="control-buttons">
+                <i class="fas fa-step-backward"></i>
+                <i class="play-pause fas" [class.fa-pause]="sharedDataService.tocando"
+                    [class.fa-play]="!sharedDataService.tocando" (click)="alternarPlayPause('audio')"></i>
+                <i class="fas fa-step-forward"></i>
+            </div>
+
+            <div class="progress-container">
+                <span>{{sharedDataService.tempoAtual}}</span>
+                <div class="progress-bar" (click)="irParaTempo($event , 'audio')">
+                    <div class="buffered" [ngStyle]="{ 'width': sharedDataService.progressoBuffer + '%' }"></div>
+                    <div class="progress" [ngStyle]="{ 'width': sharedDataService.progressoPercentual + '%' }">
+                    </div>
+                </div>
+                <span>{{sharedDataService.duracao}}</span>
+            </div>
+        </div>
+
+        <div class="other-features">
+            <i class="fas fa-undo-alt" (click)="reiniciarMusica()"></i>
+            <i class="fas fa-compress" (click)="abrirFecharReprodutorMaximizado()"></i>
+        </div>
+    </div>
+
+</body>
