@@ -1,8 +1,13 @@
 package ao.isptec.multimedia.controller;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,23 +22,72 @@ import java.util.UUID;
 @RequestMapping("/Upload") // base URL: http://localhost:8080/upload
 public class UploadController {
 
+    /*
+     * @PostMapping("/imagem")
+     * public ResponseEntity<String> uploadImagem(
+     * 
+     * @RequestParam("file") MultipartFile file,
+     * 
+     * @RequestParam(value = "sobrescrever", defaultValue = "false") boolean
+     * sobrescrever,
+     * 
+     * @RequestParam(value = "caminhoAntigo", required = false) String
+     * caminhoAntigo) {
+     * if (file.isEmpty()) {
+     * return ResponseEntity.badRequest().body("Arquivo vazio.");
+     * }
+     * 
+     * try {
+     * String pastaDestino =
+     * "C:\\Users\\Marcelo Rocha\\Desktop\\Multimédia\\Recursos\\imagens\\";
+     * Files.createDirectories(Paths.get(pastaDestino));
+     * 
+     * String nomeFinal;
+     * 
+     * if (sobrescrever && caminhoAntigo != null && !caminhoAntigo.isBlank()) {
+     * // Exemplo de caminhoAntigo: "/files/imagens/nome_imagem.png"
+     * nomeFinal = Paths.get(caminhoAntigo).getFileName().toString();
+     * } else {
+     * String nomeOriginal = file.getOriginalFilename();
+     * String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
+     * String nomeBase = nomeOriginal.substring(0, nomeOriginal.lastIndexOf('.'));
+     * nomeFinal = nomeBase + "_" + UUID.randomUUID() + extensao;
+     * }
+     * 
+     * File destino = new File(pastaDestino + nomeFinal);
+     * file.transferTo(destino);
+     * 
+     * String caminhoFoto = "/files/imagens/" + nomeFinal;
+     * 
+     * return ResponseEntity.ok(caminhoFoto);
+     * 
+     * } catch (IOException e) {
+     * e.printStackTrace();
+     * return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+     * body("Erro ao salvar imagem.");
+     * }
+     * }
+     */
+
     @PostMapping("/imagem")
     public ResponseEntity<String> uploadImagem(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "sobrescrever", defaultValue = "false") boolean sobrescrever,
             @RequestParam(value = "caminhoAntigo", required = false) String caminhoAntigo) {
+
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Arquivo vazio.");
         }
 
         try {
-            String pastaDestino = "C:\\Users\\Marcelo Rocha\\Desktop\\Multimédia\\Recursos\\imagens\\";
-            Files.createDirectories(Paths.get(pastaDestino));
+
+            String supabaseUrl = "https://ndjjninixxxhxkxokjhb.supabase.co";
+            String bucket = "ispmedia";
+            String anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kampuaW5peHh4aHhreG9ramhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwMDIzMTAsImV4cCI6MjA2OTU3ODMxMH0.QT0zRgpd0zkoGZ3qa3U1aK5NaAwPdfxYfCPbCfmZ3r8";
 
             String nomeFinal;
-
+            
             if (sobrescrever && caminhoAntigo != null && !caminhoAntigo.isBlank()) {
-                // Exemplo de caminhoAntigo: "/files/imagens/nome_imagem.png"
                 nomeFinal = Paths.get(caminhoAntigo).getFileName().toString();
             } else {
                 String nomeOriginal = file.getOriginalFilename();
@@ -42,16 +96,32 @@ public class UploadController {
                 nomeFinal = nomeBase + "_" + UUID.randomUUID() + extensao;
             }
 
-            File destino = new File(pastaDestino + nomeFinal);
-            file.transferTo(destino);
+            // Endpoint de upload do Supabase
+            String uploadUrl = supabaseUrl + "/storage/v1/object/" + bucket + "/Recursos/imagens/" + nomeFinal;
 
-            String caminhoFoto = "/files/imagens/" + nomeFinal;
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // ou MULTIPART_FORM_DATA, mas OCTET_STREAM é
+                                                                        // mais direto
+            headers.set("Authorization", "Bearer " + anonKey);
 
-            return ResponseEntity.ok(caminhoFoto);
+            HttpEntity<byte[]> requestEntity = new HttpEntity<>(file.getBytes(), headers);
 
-        } catch (IOException e) {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.POST, requestEntity,
+                    String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                // Retorna a URL pública da imagem
+                String caminhoPublico = supabaseUrl + "/storage/v1/object/" + bucket + "/Recursos/imagens/" + nomeFinal;
+                return ResponseEntity.ok(caminhoPublico);
+            } else {
+                return ResponseEntity.status(response.getStatusCode())
+                        .body("Erro ao enviar imagem para o Supabase: " + response.getBody());
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar imagem.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao fazer upload para Supabase.");
         }
     }
 
