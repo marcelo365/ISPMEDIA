@@ -11,7 +11,7 @@ export class NotificacaoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Notificacao`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Notificacao`;
   private httpClient = inject(HttpClient);
 
   //Buscar notificações não lidas

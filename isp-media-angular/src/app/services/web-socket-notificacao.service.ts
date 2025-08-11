@@ -15,7 +15,7 @@ export class WebSocketNotificacaoService {
   sharedDataService = inject(SharedDataService);
 
   conectar(idUtilizador: number, onMensagem: (n: Notificacao) => void): void {
-    const socket = new SockJS(`http://${this.sharedDataService.ipServidor}:8080/ws`);
+    const socket = new SockJS(`https://${this.sharedDataService.ipServidor}/ws`);
 
     this.stompClient = new Client({
 

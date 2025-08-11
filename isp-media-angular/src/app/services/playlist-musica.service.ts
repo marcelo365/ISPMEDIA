@@ -11,7 +11,7 @@ export class PlaylistMusicaService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/PlaylistMusica`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/PlaylistMusica`;
   private httpClient = inject(HttpClient);
 
   createPlaylistMusica(playlistMusica: PlaylistMusica) {

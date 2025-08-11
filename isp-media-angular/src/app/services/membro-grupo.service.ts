@@ -11,7 +11,7 @@ export class MembroGrupoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/MembroGrupo`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/MembroGrupo`;
   private httpClient = inject(HttpClient);
 
   saveMembroGrupo(membroGrupo: MembroGrupo) {

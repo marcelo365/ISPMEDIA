@@ -11,7 +11,7 @@ export class UtilizadorService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Utilizador`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Utilizador`;
   private httpClient = inject(HttpClient);
 
   createUtilizador(utilizador: Utilizador) {

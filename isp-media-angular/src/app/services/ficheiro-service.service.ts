@@ -8,7 +8,7 @@ import { SharedDataService } from './shared-data.service';
 export class FicheiroService {
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/api/ficheiros`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/api/ficheiros`;
   private httpClient = inject(HttpClient);
 
   uploadFicheiro(file: File, tipo: 'musica' | 'video') {

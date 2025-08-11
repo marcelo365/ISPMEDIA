@@ -11,7 +11,7 @@ export class ArtistaService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Artista`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Artista`;
   private httpClient = inject(HttpClient);
 
   createArtista(artista: Artista) {
