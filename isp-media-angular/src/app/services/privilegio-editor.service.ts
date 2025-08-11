@@ -11,7 +11,7 @@ export class PrivilegioEditorService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/PrivilegioEditor`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/PrivilegioEditor`;
   private httpClient = inject(HttpClient);
 
   savePrivilegioEditor(privilegioEditor: PrivilegioEditor) {

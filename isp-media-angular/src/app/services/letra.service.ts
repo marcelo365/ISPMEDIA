@@ -9,14 +9,11 @@ export class LetraService {
 
   constructor() { }
 
-
-  private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080`;
   private http = inject(HttpClient);
 
 
   carregarLetra(caminhoLetra: string) {
-    return this.http.get(`${this.baseUrl}${caminhoLetra}`, {
+    return this.http.get(caminhoLetra, {
       responseType: 'text',
     });
   }

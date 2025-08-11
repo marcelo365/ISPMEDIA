@@ -11,7 +11,7 @@ export class VideoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Video`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Video`;
   private httpClient = inject(HttpClient);
 
   saveVideo(video: Video) {

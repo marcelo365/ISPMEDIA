@@ -289,9 +289,9 @@ export class PaginaInicialComponent {
     this.carregarItens();
   }
 
-
   getRecursoUrl(caminhoFicheiro: string): string {
-    return `http://${this.sharedDataService.ipServidor}:8080${caminhoFicheiro}`;
+    //return `http://${this.sharedDataService.ipServidor}:8080${caminhoFicheiro}`;
+    return caminhoFicheiro;
   }
 
   mostrarNotificacao(notificacao: Notificacao) {

@@ -12,7 +12,7 @@ export class RadioEstacaoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/RadioEstacao`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/RadioEstacao`;
   private httpClient = inject(HttpClient);
 
   createRadioEstacao(radioEstacao: RadioEstacao) {

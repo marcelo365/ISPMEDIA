@@ -12,7 +12,7 @@ export class CategoriaService {
 
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}:8080/Categoria`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Categoria`;
   private http = inject(HttpClient);
 
   getAllCategorias() {
