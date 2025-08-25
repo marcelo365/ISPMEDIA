@@ -11,7 +11,7 @@
             <div class="navigation">
                 <ul>
                     <li>
-                        <a (click)="irPaginaInicial()"
+                        <a (click)="carregando == false && irPaginaInicial()"
                             [ngClass]="{'seleccionado': abaSeleccionada === 'pagina-inicial'}">
                             <span class="fa fa-home"></span>
                             <span>Página Inicial</span>
@@ -19,28 +19,32 @@
                     </li>
 
                     <li>
-                        <a (click)="irTelaArtistas()" [ngClass]="{'seleccionado': abaSeleccionada === 'artistas'}">
+                        <a (click)="carregando == false && irTelaArtistas()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'artistas'}">
                             <span class="fa fa-microphone"></span>
                             <span>Artistas</span>
                         </a>
                     </li>
 
                     <li>
-                        <a (click)="irTelaAlbuns()" [ngClass]="{'seleccionado': abaSeleccionada === 'albuns'}">
+                        <a (click)="carregando == false && irTelaAlbuns()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'albuns'}">
                             <span class="fa fa-compact-disc"></span>
                             <span>Álbuns</span>
                         </a>
                     </li>
 
                     <li>
-                        <a (click)="irTelaMusicas()" [ngClass]="{'seleccionado': abaSeleccionada === 'musicas'}">
+                        <a (click)="carregando == false && irTelaMusicas()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'musicas'}">
                             <span class="fa fas fa-music"></span>
                             <span>Músicas</span>
                         </a>
                     </li>
 
                     <li>
-                        <a (click)="irTelaVideos()" [ngClass]="{'seleccionado': abaSeleccionada === 'videos'}">
+                        <a (click)="carregando == false && irTelaVideos()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'videos'}">
                             <span class="fa fas fa-film"></span>
                             <span>Vídeos</span>
                         </a>
@@ -51,7 +55,7 @@
             <div class="navigation">
                 <ul>
                     <li>
-                        <a (click)="irTelaMidiasCarregados()"
+                        <a (click)="carregando == false && irTelaMidiasCarregados()"
                             [ngClass]="{'seleccionado': abaSeleccionada === 'midiasCarregados'}">
                             <span class="fa fas fa-photo-film"></span>
                             <span>Mídias Carregadas</span>
@@ -59,7 +63,7 @@
                     </li>
 
                     <li>
-                        <a (click)="irTelaMidiasExternas()"
+                        <a (click)="carregando == false && irTelaMidiasExternas()"
                             [ngClass]="{'seleccionado': abaSeleccionada === 'midiasExternas'}">
                             <span class="fa fas fa-share-from-square"></span>
                             <span>Mídias Externas</span>
@@ -67,28 +71,23 @@
                     </li>
 
                     <li>
-                        <a (click)="irTelaGrupos()" [ngClass]="{'seleccionado': abaSeleccionada === 'grupos'}">
+                        <a (click)="carregando == false && irTelaGrupos()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'grupos'}">
                             <span class="fa fas fa-users"></span>
                             <span>Grupos</span>
                         </a>
                     </li>
 
                     <li>
-                        <a (click)="irTelaPlaylists()" [ngClass]="{'seleccionado': abaSeleccionada === 'playlists'}">
+                        <a (click)="carregando == false && irTelaPlaylists()"
+                            [ngClass]="{'seleccionado': abaSeleccionada === 'playlists'}">
                             <span class="fa fas fa-list"></span>
                             <span>Playlists</span>
                         </a>
                     </li>
 
                     <li>
-                        <a (click)="irPaginaLive()" [ngClass]="{'seleccionado': abaSeleccionada === 'lives'}">
-                            <span class="fa fas fa-video"></span>
-                            <span>Live</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a (click)="irTelaEstacoesRadio()"
+                        <a (click)="carregando == false && irTelaEstacoesRadio()"
                             [ngClass]="{'seleccionado': abaSeleccionada === 'estacoesRadio'}">
                             <span class="fa fas fa-radio"></span>
                             <span>Estações de Rádio</span>
@@ -1708,7 +1707,6 @@
         </div>
     </div>
 
-
     <!-- MODAL EDITAR ARTISTA -->
     <div class="modal-overlay" *ngIf="isModalEditarArtistaAberto">
         <div class="modal">
@@ -1723,6 +1721,24 @@
             <input [(ngModel)]="novaBiografia" placeholder="Biografia do Artista" />
 
             <button (click)="editarNovoArtista()">Salvar</button>
+        </div>
+    </div>
+
+    <!-- MODAL CARREGANDO -->
+    <div class="modal-overlay" *ngIf="carregando">
+
+        <div class="centralizar">
+            <div class="bookshelf_wrapper">
+                <ul class="books_list">
+                    <li class="book_item first"></li>
+                    <li class="book_item second"></li>
+                    <li class="book_item third"></li>
+                    <li class="book_item fourth"></li>
+                    <li class="book_item fifth"></li>
+                    <li class="book_item sixth"></li>
+                </ul>
+                <div class="shelf"></div>
+            </div>
         </div>
     </div>
 
@@ -1820,7 +1836,6 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
     </div>
 
 
