@@ -56,7 +56,9 @@ import { RadioService } from '../../services/radio.service';
   styleUrl: './pagina-inicial.component.scss'
 })
 
+
 export class PaginaInicialComponent {
+
 
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -66,6 +68,8 @@ export class PaginaInicialComponent {
 
   private hlsAudio!: Hls | null;
   private hlsVideo!: Hls | null;
+
+  carregando: boolean = false;
 
   carregarConteudosGrupoPendentes: boolean = false;
   carregarVisualizacaoGrupoPendente: boolean = false;
@@ -309,6 +313,8 @@ export class PaginaInicialComponent {
 
   carregarItens(): void {
 
+    this.carregando = true;
+
     this.zerarVariaveis();
 
     this.carregarUsuarios();
@@ -331,14 +337,12 @@ export class PaginaInicialComponent {
         });
       },
       complete: () => {
-
         this.conjuntoGruposCriadosPorMim = this.conjuntoGruposUsuario.filter(g => g.utilizador.id == this.sharedDataService.usuarioLogado.id);
         this.conjuntoGruposDisponiveis = [...this.conjuntoGruposUsuario];
         this.carregarUsuariosCompartilharamMidias();
         this.pegarConteudosDosGruposEmQueUsuarioSeEncontra();
       }
     });
-
   }
 
 
@@ -499,8 +503,9 @@ export class PaginaInicialComponent {
 
     this.conjuntoMusicasDisponiveis = [...this.conjuntoMusicasGrupoGeralSemAlbum];
     this.conjuntoMusicasDisponiveisParaPlaylist = [...this.conjuntoMusicasGrupoGeral];
-  }
 
+    this.carregando = false;
+  }
 
 
   async pegarArtistasMusicaNaRede(musica: Musica): Promise<Artista[]> {
@@ -509,7 +514,6 @@ export class PaginaInicialComponent {
     );
     return artistasMusicas.map(ma => ma.artista);
   }
-
 
 
   verificarSeMeuCarregadoSeEncontraConjuntoMusicasVideos(meuCarregado: MeuCarregado, tipo: "musica" | "video"): boolean {
@@ -730,7 +734,6 @@ export class PaginaInicialComponent {
     for (const grupoUsuario of this.conjuntoGruposUsuario) {
       await this.pegarConteudosDeUmGrupo(grupoUsuario.id!);
     }
-
 
     //Após pegar as músicas do grupo público e dos outros grupos , pegar os artistas de cada música
     this.pegarArtistasConjuntoMusicas();

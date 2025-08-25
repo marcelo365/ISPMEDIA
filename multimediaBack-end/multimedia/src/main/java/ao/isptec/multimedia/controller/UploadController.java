@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -86,7 +87,7 @@ public class UploadController {
             String anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kampuaW5peHh4aHhreG9ramhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwMDIzMTAsImV4cCI6MjA2OTU3ODMxMH0.QT0zRgpd0zkoGZ3qa3U1aK5NaAwPdfxYfCPbCfmZ3r8";
 
             String nomeFinal;
-            
+
             if (sobrescrever && caminhoAntigo != null && !caminhoAntigo.isBlank()) {
                 nomeFinal = Paths.get(caminhoAntigo).getFileName().toString();
             } else {
@@ -100,15 +101,16 @@ public class UploadController {
             String uploadUrl = supabaseUrl + "/storage/v1/object/" + bucket + "/Recursos/imagens/" + nomeFinal;
 
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); // ou MULTIPART_FORM_DATA, mas OCTET_STREAM é
-                                                                        // mais direto
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             headers.set("Authorization", "Bearer " + anonKey);
 
             HttpEntity<byte[]> requestEntity = new HttpEntity<>(file.getBytes(), headers);
 
+            // Usa PUT se for sobrescrever, senão POST
+            HttpMethod metodoHttp = (sobrescrever ? HttpMethod.PUT : HttpMethod.POST);
+
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.POST, requestEntity,
-                    String.class);
+            ResponseEntity<String> response = restTemplate.exchange(uploadUrl, metodoHttp, requestEntity, String.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 // Retorna a URL pública da imagem
@@ -131,15 +133,16 @@ public class UploadController {
             @RequestParam("letra") String letra,
             @RequestParam(value = "sobrescrever", defaultValue = "false") boolean sobrescrever,
             @RequestParam(value = "caminhoAntigo", required = false) String caminhoAntigo) {
-        String pastaLetra = "C:\\Users\\Marcelo Rocha\\Desktop\\Multimédia\\Recursos\\letras\\";
 
         try {
-            Files.createDirectories(Paths.get(pastaLetra));
+            String supabaseUrl = "https://ndjjninixxxhxkxokjhb.supabase.co";
+            String bucket = "ispmedia";
+            String anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kampuaW5peHh4aHhreG9ramhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwMDIzMTAsImV4cCI6MjA2OTU3ODMxMH0.QT0zRgpd0zkoGZ3qa3U1aK5NaAwPdfxYfCPbCfmZ3r8";
 
             String nomeFicheiro;
 
             if (sobrescrever && caminhoAntigo != null && !caminhoAntigo.isBlank()) {
-                // Exemplo: "/files/letras/NomeDaMusica_123.txt"
+                // Mantém o mesmo nome se for sobrescrever
                 nomeFicheiro = Paths.get(caminhoAntigo).getFileName().toString();
             } else {
                 // Gera nome único
@@ -148,17 +151,35 @@ public class UploadController {
                 nomeFicheiro = nomeBase + "_" + uuid + ".txt";
             }
 
-            Path caminhoLetra = Paths.get(pastaLetra, nomeFicheiro);
+            // Endpoint do Supabase para letras
+            String uploadUrl = supabaseUrl + "/storage/v1/object/" + bucket + "/Recursos/letras/" + nomeFicheiro;
 
-            Files.writeString(caminhoLetra, letra, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN); // texto plano
+            headers.set("Authorization", "Bearer " + anonKey);
 
-            String caminhoVirtual = "/files/letras/" + nomeFicheiro;
-            return ResponseEntity.ok(caminhoVirtual);
+            HttpEntity<byte[]> requestEntity = new HttpEntity<>(letra.getBytes(StandardCharsets.UTF_8), headers);
 
-        } catch (IOException e) {
+            // Usa PUT se for sobrescrever, senão POST
+            HttpMethod metodoHttp = (sobrescrever ? HttpMethod.PUT : HttpMethod.POST);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.exchange(uploadUrl, metodoHttp, requestEntity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                // Retorna a URL pública do ficheiro
+                String caminhoPublico = supabaseUrl + "/storage/v1/object/" + bucket + "/Recursos/letras/"
+                        + nomeFicheiro;
+                return ResponseEntity.ok(caminhoPublico);
+            } else {
+                return ResponseEntity.status(response.getStatusCode())
+                        .body("Erro ao enviar letra para o Supabase: " + response.getBody());
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao guardar a letra da música.");
+                    .body("Erro ao fazer upload da letra para Supabase.");
         }
     }
 
