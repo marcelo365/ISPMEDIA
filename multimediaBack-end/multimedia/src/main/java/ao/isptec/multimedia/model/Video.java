@@ -18,7 +18,10 @@ public class Video {
     private LocalTime duracao;
     private String formato;
     private Integer tamanho;
+    
+    @Column(columnDefinition = "TEXT")
     private String caminhoFicheiro;
+    
     private String caminhoFoto;
     private LocalDate dataLancamento;
     private String autor;

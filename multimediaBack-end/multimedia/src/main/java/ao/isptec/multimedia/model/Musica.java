@@ -18,7 +18,10 @@ public class Musica {
     private Integer tamanho; // MB
     private String letra;
     private LocalDate dataLancamento;
+
+    @Column(columnDefinition = "TEXT")
     private String caminhoFicheiro;
+    
     private String caminhoFoto;
 
     @ManyToOne
