@@ -13,4 +13,6 @@ public interface MusicaArtistaRepository extends JpaRepository<MusicaArtista, In
     List<MusicaArtista> findByArtistaId(Integer idArtista);
 
     Optional<MusicaArtista> findById(Integer id);
+
+    void deleteByMusicaId(Integer idMusica);
 }

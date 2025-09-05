@@ -1,5 +1,6 @@
 package ao.isptec.multimedia.controller;
 
+import ao.isptec.multimedia.dto.PlaylistMusicas;
 import ao.isptec.multimedia.model.Playlist;
 import ao.isptec.multimedia.service.PlaylistService;
 
@@ -48,5 +49,10 @@ public class PlaylistController {
     @GetMapping("/getPlaylistById")
     public Playlist getPlaylistById(@RequestParam Integer id) {
         return playlistService.findById(id);
+    }
+
+    @GetMapping("/pegarMusicasDeCadaPlaylistDoSistema")
+    public List<PlaylistMusicas> pegarMusicasDeCadaPlaylistDoSistema() {
+        return playlistService.pegarMusicasDeCadaPlaylistDoSistema();
     }
 }

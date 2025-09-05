@@ -19,6 +19,7 @@ public class PrivilegioEditorService {
         return repository.save(privilegioEditor);
     }
 
+    @Transactional
     public void delete(PrivilegioEditor privilegioEditor) {
         repository.delete(privilegioEditor);
     }

@@ -1,9 +1,12 @@
 package ao.isptec.multimedia.controller;
 
+import ao.isptec.multimedia.dto.UsuarioMeusCarregados;
 import ao.isptec.multimedia.model.MeuCarregado;
+import ao.isptec.multimedia.model.Utilizador;
 import ao.isptec.multimedia.service.MeuCarregadoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +26,18 @@ public class MeuCarregadoController {
     @DeleteMapping("/delete")
     public void deleteMeuCarregado(@RequestBody MeuCarregado meuCarregado) {
         meuCarregadoService.delete(meuCarregado);
+    }
+
+    @DeleteMapping("/deletePorMusica/{idMusica}")
+    public ResponseEntity<Void> deletarPorMusica(@PathVariable Integer idMusica) {
+        meuCarregadoService.deletarPorMusica(idMusica);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
+    @DeleteMapping("/deletePorVideo/{idVideo}")
+    public ResponseEntity<Void> deletarPorVideo(@PathVariable Integer idVideo) {
+        meuCarregadoService.deletarPorVideo(idVideo);
+        return ResponseEntity.noContent().build(); // HTTP 204
     }
 
     @GetMapping("/getAll")
@@ -54,4 +69,10 @@ public class MeuCarregadoController {
     public MeuCarregado getMeuCarregadoById(@RequestParam Integer id) {
         return meuCarregadoService.findById(id);
     }
+
+    @PostMapping("/pegarMeusCarregadosDosUsuarios")
+    public List<UsuarioMeusCarregados> pegarMeusCarregadosDosUsuarios(@RequestBody List<Utilizador> usuarios) {
+        return meuCarregadoService.pegarMeusCarregadosDosUsuarios(usuarios);
+    }
+
 }

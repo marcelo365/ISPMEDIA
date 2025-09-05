@@ -11,7 +11,7 @@ export class PlaylistMusicaService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/PlaylistMusica`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/PlaylistMusica`;
   private httpClient = inject(HttpClient);
 
   createPlaylistMusica(playlistMusica: PlaylistMusica) {
@@ -36,6 +36,21 @@ export class PlaylistMusicaService {
 
   getPlaylistMusicaById(id: number) {
     return this.httpClient.get<PlaylistMusica>(`${this.baseUrl}/getPlaylistMusicaById?id=${id}`);
+  }
+
+  deletarPorMusica(idMusica: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/${idMusica}`);
+  }
+
+  deletarPorPlaylist(idPlaylist: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/deletarPorPlaylist/${idPlaylist}`);
+  }
+
+  deleteByMusicaIdAndPlaylistId(idMusica: number, idPlaylist: number) {
+    return this.httpClient.delete(
+      `${this.baseUrl}/delete/musica/${idMusica}/playlist/${idPlaylist}`,
+      { responseType: 'text' } // ⚠ importante
+    );
   }
 
 }

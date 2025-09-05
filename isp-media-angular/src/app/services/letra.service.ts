@@ -13,9 +13,8 @@ export class LetraService {
 
 
   carregarLetra(caminhoLetra: string) {
-    return this.http.get(caminhoLetra, {
-      responseType: 'text',
-    });
+    const url = `${caminhoLetra}?nocache=${new Date().getTime()}`;
+    return this.http.get(url, { responseType: 'text' });
   }
 
 }

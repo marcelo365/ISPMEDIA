@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Album } from '../models/Album';
 import { SharedDataService } from './shared-data.service';
+import { AlbumConjuntoArtistas } from '../models/AlbumConjuntoArtistas';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AlbumService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/Album`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/Album`;
   private httpClient = inject(HttpClient);
 
   createAlbum(album: Album) {
@@ -39,6 +40,13 @@ export class AlbumService {
 
   getAlbumById(id: number) {
     return this.httpClient.get<Album>(`${this.baseUrl}/getAlbumById?id=${id}`);
+  }
+
+  pegarAlbunsArtistasDosAlbuns(albuns: Array<Album>) {
+    return this.httpClient.post<AlbumConjuntoArtistas[]>(
+      `${this.baseUrl}/pegarAlbunsArtistasDosAlbuns`,
+      albuns // <-- vai no body
+    );
   }
 
 }

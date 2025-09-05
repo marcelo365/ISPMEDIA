@@ -8,7 +8,7 @@ import { Estacao } from '../models/Estacao';
 })
 export class RadioService {
 
-  private apiUrl = 'https://de1.api.radio-browser.info/json/stations';
+  private apiUrl = 'http://de1.api.radio-browser.info/json/stations';
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +20,7 @@ export class RadioService {
   }
 
   listarPaises(): Observable<string[]> {
-    return this.http.get<any[]>('https://de1.api.radio-browser.info/json/countries')
+    return this.http.get<any[]>('http://de1.api.radio-browser.info/json/countries')
       .pipe(map(paises => paises.map(p => p.name))); // extrai apenas o nome
   }
 

@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.RadioEstacao;
 import ao.isptec.multimedia.repository.RadioEstacaoRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class RadioEstacaoService {
         return repository.save(radioEstacao);
     }
 
+    @Transactional
     public void delete(RadioEstacao radioEstacao) {
         repository.delete(radioEstacao);
     }

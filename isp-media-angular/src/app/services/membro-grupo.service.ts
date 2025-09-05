@@ -11,7 +11,7 @@ export class MembroGrupoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/MembroGrupo`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/MembroGrupo`;
   private httpClient = inject(HttpClient);
 
   saveMembroGrupo(membroGrupo: MembroGrupo) {
@@ -20,6 +20,10 @@ export class MembroGrupoService {
 
   deleteMembroGrupo(membroGrupo: MembroGrupo) {
     return this.httpClient.delete<void>(`${this.baseUrl}/delete`, { body: membroGrupo });
+  }
+
+  deletarPorGrupo(idGrupo: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/deletePorGrupo/${idGrupo}`);
   }
 
   getAllMembrosGrupo() {

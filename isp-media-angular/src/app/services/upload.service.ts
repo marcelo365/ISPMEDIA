@@ -10,7 +10,7 @@ export class UploadService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/Upload`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/Upload`;
   private httpClient = inject(HttpClient);
 
   /**
@@ -70,6 +70,13 @@ export class UploadService {
     });
   }
 
+  deletarImagemLetra(caminho: string) {
+    const params = new HttpParams().set('caminho', caminho);
+    return this.httpClient.delete(`${this.baseUrl}/imagem/deletar`, {
+      params,
+      responseType: 'text'
+    });
+  }
 
 
 

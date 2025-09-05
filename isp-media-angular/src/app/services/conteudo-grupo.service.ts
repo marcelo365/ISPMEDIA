@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ConteudoGrupo } from '../models/ConteudoGrupo';
 import { SharedDataService } from './shared-data.service';
+import { Grupo } from '../models/Grupo';
+import { GrupoConteudosGrupo } from '../models/GrupoConteudosGrupo';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class ConteudoGrupoService {
 
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/ConteudoGrupo`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/ConteudoGrupo`;
   private httpClient = inject(HttpClient);
 
   saveConteudoGrupo(conteudoGrupo: ConteudoGrupo) {
@@ -22,6 +24,21 @@ export class ConteudoGrupoService {
   deleteConteudoGrupo(conteudoGrupo: ConteudoGrupo) {
     return this.httpClient.delete<void>(`${this.baseUrl}/delete`, { body: conteudoGrupo });
   }
+  
+  deleteByMusicaIdAndGrupoId(musicaId: number, grupoId: number) {
+    return this.httpClient.delete(
+      `${this.baseUrl}/delete/musica/${musicaId}/grupo/${grupoId}`,
+      { responseType: 'text' } // ⚠ importante
+    );
+  }
+
+  deleteByVideoIdAndGrupoId(videoId: number, grupoId: number) {
+    return this.httpClient.delete(
+      `${this.baseUrl}/delete/video/${videoId}/grupo/${grupoId}`,
+      { responseType: 'text' } // ⚠ importante
+    );
+  }
+
 
   getAllConteudosGrupos() {
     return this.httpClient.get<ConteudoGrupo[]>(`${this.baseUrl}/getAll`);
@@ -47,6 +64,11 @@ export class ConteudoGrupoService {
     return this.httpClient.get<ConteudoGrupo>(`${this.baseUrl}/getConteudoGrupoById?id=${id}`);
   }
 
-
+  pegarConteudosGrupoDosGrupos(grupos: Array<Grupo>) {
+    return this.httpClient.post<GrupoConteudosGrupo[]>(
+      `${this.baseUrl}/pegarConteudosGrupoDosGrupos`,
+      grupos // <-- vai no body
+    );
+  }
 
 }

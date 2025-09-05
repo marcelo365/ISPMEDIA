@@ -11,7 +11,7 @@ export class NotificacaoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/Notificacao`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/Notificacao`;
   private httpClient = inject(HttpClient);
 
   //Buscar notificações não lidas
@@ -19,6 +19,10 @@ export class NotificacaoService {
     return this.httpClient.post<Notificacao[]>(`${this.baseUrl}/getNotificacoesNaoLidas`, {
       id: idUtilizador
     });
+  }
+
+  deleteNotificacoes(notificacoes: Notificacao[]) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/delete`, { body: notificacoes });
   }
 
   // Marcar notificações como lidas

@@ -2,6 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { MusicaArtista } from '../models/MusicaArtista';
 import { HttpClient } from '@angular/common/http';
 import { SharedDataService } from './shared-data.service';
+import { Musica } from '../models/Musica';
+import { MusicaConjuntoArtistas } from '../models/MusicaConjuntoArtistas';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class MusicaArtistaService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/MusicaArtista`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/MusicaArtista`;
   private httpClient = inject(HttpClient);
 
   saveMusicaArtista(musicaArtista: MusicaArtista) {
@@ -37,4 +39,16 @@ export class MusicaArtistaService {
   getMusicaArtistaById(id: number) {
     return this.httpClient.get<MusicaArtista>(`${this.baseUrl}/getMusicaArtistaById?id=${id}`);
   }
+
+  pegarMusicasArtistasDasMusicas(musicas: Array<Musica>) {
+    return this.httpClient.post<MusicaConjuntoArtistas[]>(
+      `${this.baseUrl}/pegarMusicasArtistasDasMusicas`,
+      musicas // <-- vai no body
+    );
+  }
+
+  deletarPorMusica(idMusica: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/${idMusica}`);
+  }
+
 }

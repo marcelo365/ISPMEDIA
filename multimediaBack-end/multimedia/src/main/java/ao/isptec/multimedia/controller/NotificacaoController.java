@@ -31,4 +31,9 @@ public class NotificacaoController {
         service.criarNotificacao(mensagem, utilizador);
     }
 
+    @DeleteMapping("/delete")
+    public void deleteNotificacao(@RequestBody List<Notificacao> notificacoes) {
+        service.delete(notificacoes);
+    }
+
 }

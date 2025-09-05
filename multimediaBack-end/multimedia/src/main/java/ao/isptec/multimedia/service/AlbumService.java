@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Album;
 import ao.isptec.multimedia.repository.AlbumRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class AlbumService {
         return repository.save(album);
     }
 
+    @Transactional
     public void delete(Album album) {
         repository.delete(album);
     }

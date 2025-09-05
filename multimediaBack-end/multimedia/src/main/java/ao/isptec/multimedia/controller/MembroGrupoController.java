@@ -4,6 +4,7 @@ import ao.isptec.multimedia.model.MembroGrupo;
 import ao.isptec.multimedia.service.MembroGrupoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,12 @@ public class MembroGrupoController {
     @DeleteMapping("/delete")
     public void deleteMembroGrupo(@RequestBody MembroGrupo membroGrupo) {
         membroGrupoService.delete(membroGrupo);
+    }
+
+    @DeleteMapping("/deletePorGrupo/{idGrupo}")
+    public ResponseEntity<Void> deletarPorGrupo(@PathVariable Integer idGrupo) {
+        membroGrupoService.deletarPorGrupo(idGrupo);
+        return ResponseEntity.noContent().build(); // HTTP 204
     }
 
     @GetMapping("/getAll")

@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Categoria;
 import ao.isptec.multimedia.repository.CategoriaRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class CategoriaService {
         return repository.save(categoria);
     }
 
+    @Transactional
     public void delete(Categoria categoria) {
         repository.delete(categoria);
     }

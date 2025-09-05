@@ -11,7 +11,7 @@ export class AlbumArtistaService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/AlbumArtista`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/AlbumArtista`;
   private httpClient = inject(HttpClient);
 
   saveAlbumArtista(albumArtista: AlbumArtista) {
@@ -20,6 +20,10 @@ export class AlbumArtistaService {
 
   deleteAlbumArtista(albumArtista: AlbumArtista) {
     return this.httpClient.delete<void>(`${this.baseUrl}/delete`, { body: albumArtista });
+  }
+
+  deletarPorAlbum(idAlbum: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/deletePorAlbum/${idAlbum}`);
   }
 
   getAllAlbunsArtistas() {

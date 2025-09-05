@@ -17,4 +17,9 @@ public interface MeuCarregadoRepository extends JpaRepository<MeuCarregado, Inte
     List<MeuCarregado> findByVinculoDireto(Boolean vinculoDireto);
 
     Optional<MeuCarregado> findById(Integer id);
+
+    void deleteByMusicaId(Integer idMusica);
+
+    void deleteByVideoId(Integer idVideo);
+
 }

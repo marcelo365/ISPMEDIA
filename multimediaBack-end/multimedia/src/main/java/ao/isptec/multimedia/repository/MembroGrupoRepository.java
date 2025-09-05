@@ -20,4 +20,6 @@ public interface MembroGrupoRepository extends JpaRepository<MembroGrupo, Intege
 
     List<MembroGrupo> findByEstadoAndUtilizadorId(Integer estado, Integer utilizadorId);
 
+    void deleteByGrupoId(Integer idGrupo);
+
 }

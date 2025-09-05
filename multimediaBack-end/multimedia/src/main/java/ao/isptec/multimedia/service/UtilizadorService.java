@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Utilizador;
 import ao.isptec.multimedia.repository.UtilizadorRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,7 @@ public class UtilizadorService {
         return (List<Utilizador>) repository.findAll();
     }
 
+    @Transactional
     public void delete(Utilizador utilizador) {
         repository.delete(utilizador);
     }

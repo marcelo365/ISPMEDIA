@@ -2,16 +2,18 @@ import { inject, Injectable } from '@angular/core';
 import { Playlist } from '../models/Playlist';
 import { HttpClient } from '@angular/common/http';
 import { SharedDataService } from './shared-data.service';
+import { PlaylistMusicas } from '../models/PlaylistMusicas';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class PlaylistService {
 
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/Playlist`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/Playlist`;
   private httpClient = inject(HttpClient);
 
   createPlaylist(playlist: Playlist) {
@@ -40,6 +42,11 @@ export class PlaylistService {
 
   getPlaylistById(id: number) {
     return this.httpClient.get<Playlist>(`${this.baseUrl}/getPlaylistById?id=${id}`);
+  }
+
+  pegarMusicasDeCadaPlaylistDoSistema() {
+    return this.httpClient.get<PlaylistMusicas[]>(`${this.baseUrl}/pegarMusicasDeCadaPlaylistDoSistema`);
+
   }
 
 

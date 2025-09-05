@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Artista;
 import ao.isptec.multimedia.repository.ArtistaRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class ArtistaService {
         return repository.save(artista);
     }
 
+    @Transactional
     public void delete(Artista artista) {
         repository.delete(artista);
     }

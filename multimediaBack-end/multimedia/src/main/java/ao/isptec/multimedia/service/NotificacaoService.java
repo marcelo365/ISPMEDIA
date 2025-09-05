@@ -1,8 +1,10 @@
 package ao.isptec.multimedia.service;
 
+import ao.isptec.multimedia.model.Grupo;
 import ao.isptec.multimedia.model.Notificacao;
 import ao.isptec.multimedia.model.Utilizador;
 import ao.isptec.multimedia.repository.NotificacaoRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -41,4 +43,10 @@ public class NotificacaoService {
         }
         repository.saveAll(notificacoes);
     }
+
+    @Transactional
+    public void delete(List<Notificacao> notificacoes) {
+        repository.deleteAllInBatch(notificacoes);
+    }
+
 }

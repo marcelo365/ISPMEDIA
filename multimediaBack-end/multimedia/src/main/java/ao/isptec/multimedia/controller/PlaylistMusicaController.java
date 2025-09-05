@@ -4,6 +4,7 @@ import ao.isptec.multimedia.model.PlaylistMusica;
 import ao.isptec.multimedia.service.PlaylistMusicaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,25 @@ public class PlaylistMusicaController {
     @DeleteMapping("/delete")
     public void deletePlaylistMusica(@RequestBody PlaylistMusica playlistMusica) {
         playlistMusicaService.delete(playlistMusica);
+    }
+
+    @DeleteMapping("/{idMusica}")
+    public ResponseEntity<Void> deletarPorMusica(@PathVariable Integer idMusica) {
+        playlistMusicaService.deletarPorMusica(idMusica);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
+    @DeleteMapping("deletarPorPlaylist/{idPlaylist}")
+    public ResponseEntity<Void> deletarPorPlaylist(@PathVariable Integer idPlaylist) {
+        playlistMusicaService.deletarPorPlaylist(idPlaylist);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
+    @DeleteMapping("/delete/musica/{idMusica}/playlist/{idPlaylist}")
+    public ResponseEntity<String> deleteByMusicaIdAndPlaylistId(@PathVariable Integer idMusica,
+            @PathVariable Integer idPlaylist) {
+        playlistMusicaService.deleteByMusicaIdAndPlaylistId(idMusica, idPlaylist);
+        return ResponseEntity.ok("Conteúdo deletado com sucesso!");
     }
 
     @GetMapping("/getAll")

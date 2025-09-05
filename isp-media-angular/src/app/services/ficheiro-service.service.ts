@@ -8,7 +8,7 @@ import { SharedDataService } from './shared-data.service';
 export class FicheiroService {
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/api/ficheiros`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/api/ficheiros`;
   private httpClient = inject(HttpClient);
 
   uploadFicheiro(file: File, tipo: 'musica' | 'video') {
@@ -39,6 +39,20 @@ export class FicheiroService {
       responseType: 'blob'
     });
   }
+
+
+  deletarFicheiro(caminho: string, extensao: string) {
+    const params = new HttpParams()
+      .set('caminho', caminho)
+      .set('extensao', extensao);
+    return this.httpClient.delete(`${this.baseUrl}/musica/deletar`, {
+      params,
+      responseType: 'text'
+    });
+  }
+
+
+
 
 
 }

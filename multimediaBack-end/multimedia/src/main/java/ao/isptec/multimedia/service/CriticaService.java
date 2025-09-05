@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Critica;
 import ao.isptec.multimedia.repository.CriticaRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class CriticaService {
         return repository.save(critica);
     }
 
+    @Transactional
     public void delete(Critica critica) {
         repository.delete(critica);
     }

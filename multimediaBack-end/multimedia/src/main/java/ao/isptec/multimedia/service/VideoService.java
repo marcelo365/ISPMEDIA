@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.Video;
 import ao.isptec.multimedia.repository.VideoRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class VideoService {
         return repository.save(video);
     }
 
+    @Transactional
     public void delete(Video video) {
         repository.delete(video);
     }

@@ -2,6 +2,7 @@ package ao.isptec.multimedia.service;
 
 import ao.isptec.multimedia.model.MembroGrupo;
 import ao.isptec.multimedia.repository.MembroGrupoRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,14 @@ public class MembroGrupoService {
         return repository.save(membroGrupo);
     }
 
+    @Transactional
     public void delete(MembroGrupo membroGrupo) {
         repository.delete(membroGrupo);
+    }
+
+    @Transactional
+    public void deletarPorGrupo(Integer idGrupo) {
+        repository.deleteByGrupoId(idGrupo);
     }
 
     public List<MembroGrupo> getAllMembrosGrupo() {

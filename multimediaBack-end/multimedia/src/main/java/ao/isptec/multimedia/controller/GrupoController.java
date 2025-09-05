@@ -1,5 +1,6 @@
 package ao.isptec.multimedia.controller;
 
+import ao.isptec.multimedia.dto.GrupoMembrosGrupo;
 import ao.isptec.multimedia.model.Grupo;
 import ao.isptec.multimedia.service.GrupoService;
 
@@ -43,6 +44,11 @@ public class GrupoController {
     @GetMapping("/getGrupoById")
     public Grupo getGrupoById(@RequestParam Integer id) {
         return grupoService.findById(id);
+    }
+
+    @GetMapping("/pegarMembrosDeCadaGrupoDoSistema")
+    public List<GrupoMembrosGrupo> pegarMembrosDeCadaGrupoDoSistema() {
+        return grupoService.pegarMembrosDeCadaGrupoDoSistema();
     }
 
 }

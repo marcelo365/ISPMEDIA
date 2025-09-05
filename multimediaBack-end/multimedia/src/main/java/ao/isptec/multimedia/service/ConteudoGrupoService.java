@@ -1,11 +1,17 @@
 package ao.isptec.multimedia.service;
 
+import ao.isptec.multimedia.dto.GrupoConteudosGrupo;
+import ao.isptec.multimedia.dto.UsuarioMeusCarregados;
 import ao.isptec.multimedia.model.ConteudoGrupo;
+import ao.isptec.multimedia.model.Grupo;
+import ao.isptec.multimedia.model.Utilizador;
 import ao.isptec.multimedia.repository.ConteudoGrupoRepository;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,8 +24,19 @@ public class ConteudoGrupoService {
         return repository.save(conteudoGrupo);
     }
 
+    @Transactional
     public void delete(ConteudoGrupo conteudoGrupo) {
         repository.delete(conteudoGrupo);
+    }
+
+    @Transactional
+    public void deleteByMusicaIdAndGrupoId(Integer musicaId, Integer grupoId) {
+        repository.deleteByMusicaIdAndGrupoId(musicaId, grupoId);
+    }
+
+    @Transactional
+    public void deleteByVideoIdAndGrupoId(Integer videoId, Integer grupoId) {
+        repository.deleteByVideoIdAndGrupoId(videoId, grupoId);
     }
 
     public List<ConteudoGrupo> getAllConteudosGrupos() {
@@ -45,4 +62,17 @@ public class ConteudoGrupoService {
     public ConteudoGrupo findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
+
+    public List<GrupoConteudosGrupo> pegarConteudosGrupoDosGrupos(List<Grupo> grupos) {
+
+        List<GrupoConteudosGrupo> gruposConteudosGrupo = new ArrayList<GrupoConteudosGrupo>();
+
+        for (Grupo grupo : grupos) {
+
+            gruposConteudosGrupo.add(new GrupoConteudosGrupo(grupo, findByGrupoId(grupo.getId())));
+        }
+
+        return gruposConteudosGrupo;
+    }
+
 }

@@ -9,6 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlbumArtistaRepository extends JpaRepository<AlbumArtista, Integer> {
     List<AlbumArtista> findByArtistaId(Integer idArtista);
+
     List<AlbumArtista> findByAlbumId(Integer idAlbum);
+
     Optional<AlbumArtista> findById(Integer id);
+
+    void deleteByAlbumId(Integer idAlbum);
 }

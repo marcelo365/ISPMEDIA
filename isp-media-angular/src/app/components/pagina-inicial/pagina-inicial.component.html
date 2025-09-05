@@ -117,7 +117,7 @@
         </div>
 
         <div class="search-bar non-active" #barraPesquisa>
-            <input [(ngModel)]="pesquisaInput" type="text" placeholder="Pesquisar..." />
+            <input (input)="efectuarPesquisa()" [(ngModel)]="pesquisaInput" type="text" placeholder="Pesquisar..." />
             <span (click)="efectuarPesquisa()" class="emoji">🔍︎</span>
         </div>
 
@@ -380,7 +380,7 @@
                         <div class="play">
                             <span (click)="abrirVisualizacaoAlbum(album)" class="fa fa-play"></span>
                             <span (click)="abrirModalEditarAlbum(album)" class="fa fa-pencil da"></span>
-                            <span class="fa fa-trash delete-icon"></span>
+                            <span (click)="deletarAlbum(album)" class="fa fa-trash delete-icon"></span>
                         </div>
                         <h4>{{ album.titulo }}</h4>
                         <p>{{ album.descricao }}</p>
@@ -403,7 +403,10 @@
                                 class="fa fa-play"></span>
                             <span (click)="abrirModalEditarMusica(meuCarregadoMusica.musica)"
                                 class="fa fa-pencil da"></span>
-                            <span class="fa fa-trash delete-icon"></span>
+
+                            <span class="fa fa-trash delete-icon"
+                                (click)="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoMusica , 'musica') ? deletarMidiaCarregada(meuCarregadoMusica , verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoMusica , 'musica') ) :  deletarMidiaCarregada(meuCarregadoMusica , null)"></span>
+
                             <span (click)="abrirModalPartilharConteudo(meuCarregadoMusica.musica , 'musica' )"
                                 *ngIf="meuCarregadoMusica.vinculoDireto == false"
                                 class="fa fa-paperclip share-icon"></span>
@@ -446,7 +449,10 @@
                             <span (click)="rodarVideo(meuCarregadoVideo.video)" class="fa fa-play"></span>
                             <span (click)="abrirModalEditarVideo(meuCarregadoVideo.video)"
                                 class="fa fa-pencil da"></span>
-                            <span class="fa fa-trash delete-icon"></span>
+
+                            <span class="fa fa-trash delete-icon"
+                                (click)="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoVideo , 'video') ? deletarMidiaCarregada(meuCarregadoVideo , verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregadoVideo , 'video') ) : deletarMidiaCarregada(meuCarregadoVideo , null)"></span>
+
                             <span (click)="abrirModalPartilharConteudo(meuCarregadoVideo.video , 'video')"
                                 *ngIf="meuCarregadoVideo.vinculoDireto == false"
                                 class="fa fa-paperclip share-icon"></span>
@@ -485,6 +491,7 @@
             <div>
                 <h4 class="detalhesCima">Grupos criados por mim</h4>
                 <div class="lista-grupos">
+
                     <div class="grupo-item" *ngFor="let grupo of conjuntoGruposCriadosPorMim"
                         (click)="abrirVisualizacaoGrupo(grupo)">
                         <div class="grupo-icon">🏘️</div>
@@ -496,6 +503,11 @@
                                 </span>
                                 <span class="criador-grupo">• Criado por {{ grupo.utilizador.username }}</span>
                             </div>
+                        </div>
+
+                        <div class="acoes-solicitacao">
+                            <button (click)="deletarGrupo(grupo); $event.stopPropagation()" class="botao-rejeitar">✖
+                                Eliminar</button>
                         </div>
 
                     </div>
@@ -558,6 +570,7 @@
             <div>
                 <h4 class="detalhesCima">Minhas Playlists</h4>
                 <div class="lista-grupos">
+
                     <div class="grupo-item" *ngFor="let playlist of conjuntoPlaylistsUsuario"
                         (click)="abrirVisualizacaoPlaylist(playlist)">
                         <div class="grupo-icon">🎶</div>
@@ -569,6 +582,12 @@
                                 </span>
                                 <span class="criador-grupo">• Criado por {{ playlist.utilizador.username }}</span>
                             </div>
+                        </div>
+
+                        <div class="acoes-solicitacao">
+                            <button (click)="deletarPlaylist(playlist); $event.stopPropagation()"
+                                class="botao-rejeitar">✖
+                                Eliminar</button>
                         </div>
                     </div>
                 </div>
@@ -937,7 +956,8 @@
                 <div *ngIf="verificarSeUsuarioOwnerGrupoActual() && (membroGrupo.utilizador.id != sharedDataService.usuarioLogado.id ) && (membroGrupo.utilizador.id != membroGrupo.grupo.utilizador.id)"
                     class="acoes-solicitacao">
 
-                    <button (click)="rejeitarSolicitacaoGrupo(membroGrupo)" class="acao-icone remover" title="Remover">
+                    <button (click)="rejeitarSolicitacaoGrupo(membroGrupo , true)" class="acao-icone remover"
+                        title="Remover">
                         <i class="fas fa-user-times"></i>
                     </button>
 
@@ -974,7 +994,8 @@
 
                 <div class="acoes-solicitacao">
                     <button class="botao-aceitar" (click)="aceitarSolicitacaoGrupo(membroGrupo)">✔ Aceitar</button>
-                    <button class="botao-rejeitar" (click)="rejeitarSolicitacaoGrupo(membroGrupo)">✖ Rejeitar</button>
+                    <button class="botao-rejeitar" (click)="rejeitarSolicitacaoGrupo(membroGrupo , false)">✖
+                        Rejeitar</button>
                 </div>
             </div>
         </div>
@@ -1008,10 +1029,11 @@
                         <img [src]="getRecursoUrl(musica.caminhoFoto)" />
                         <div class="play">
 
-                            <div *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual()">
+                            <div
+                                *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual() || pegarCriadorMusica(musica , conjuntoMusicas , conjuntoCriadoresPostagemMusicas).id == sharedDataService.usuarioLogado.id">
 
                                 <span (click)="abrirModalEditarMusica(musica)" class="fa fa-pencil da"></span>
-                                <span class="fa fa-trash delete-icon"></span>
+                                <span (click)="deletarConteudoDeUmGrupo(musica)" class="fa fa-trash delete-icon"></span>
                             </div>
 
                             <span
@@ -1028,13 +1050,11 @@
                                 *ngFor="let artista of pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas); let last = last">
                                 {{ artista.nome }}<span *ngIf="!last">, </span>
                             </span>
-
                         </p>
 
                     </div>
                 </div>
             </div>
-
 
 
             <div>
@@ -1048,9 +1068,10 @@
                         <div class="play">
 
 
-                            <div *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual()">
+                            <div
+                                *ngIf="verificarSeUsuarioOwnerGrupoActual() || verificarSeUsuarioEditorGrupoActual() || pegarCriadorVideo(video , conjuntoVideos , conjuntoCriadoresPostagemVideos).id == sharedDataService.usuarioLogado.id">
                                 <span (click)="abrirModalEditarVideo(video)" class="fa fa-pencil da"></span>
-                                <span class="fa fa-trash delete-icon"></span>
+                                <span (click)="deletarConteudoDeUmGrupo(video)" class="fa fa-trash delete-icon"></span>
                             </div>
 
                             <span (click)="rodarVideo(video)" class="fa fa-play"></span>
@@ -1068,7 +1089,6 @@
             </div>
         </div>
     </div>
-
 
     <!-- Página Visualização do Conteúdo Compartilhado por um Usuário -->
     <div class="conteudo-midias-compartilhadas-detalhes pagina"
@@ -1095,7 +1115,11 @@
                                 (click)="rodarMusica(meuCarregado.musica, pegarArtistasMusica(meuCarregado.musica , conjuntoMusicas , conjuntoArtistasMusicas))"
                                 class="fa fa-play"></span>
                             <span (click)="abrirModalEditarMusica(meuCarregado.musica)" class="fa fa-pencil da"></span>
-                            <span class="fa fa-trash delete-icon"></span>
+
+                            <span
+                                (click)="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'musica') ? deletarMidiaCarregada(meuCarregado , verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'musica') ) :  deletarMidiaCarregada(meuCarregado , null)"
+                                class="fa fa-trash delete-icon"></span>
+
                         </div>
 
 
@@ -1137,7 +1161,11 @@
                         <div class="play">
                             <span (click)="rodarVideo(meuCarregado.video)" class="fa fa-play"></span>
                             <span (click)="abrirModalEditarVideo(meuCarregado.video)" class="fa fa-pencil da"></span>
-                            <span class="fa fa-trash delete-icon"></span>
+
+                            <span
+                                (click)="verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'video') ? deletarMidiaCarregada(meuCarregado , verificarSeMidiaFoiCriadaDirectamenteGrupo(meuCarregado , 'video') ) :  deletarMidiaCarregada(meuCarregado , null)"
+                                class="fa fa-trash delete-icon"></span>
+
                         </div>
 
                         <h4>{{ meuCarregado.video.titulo }}</h4>
@@ -1187,7 +1215,8 @@
                 </p>
             </div>
 
-            <div class="playlist-acoes">
+            <div *ngIf="sharedDataService.playlistActual.utilizador.id == sharedDataService.usuarioLogado.id"
+                class="playlist-acoes">
                 <button (click)=" abrirModalAdicionarMusicaPlaylist()" class="botao-acoes-playlist adicionar-musica">
                     <i class="fas fa-plus"></i> Adicionar música
                 </button>
@@ -1198,14 +1227,15 @@
                     {{ sharedDataService.playlistActual.privada ? 'Tornar pública' : 'Tornar privada' }}
                 </button>
             </div>
-
         </div>
 
         <!-- Lista de músicas da playlist -->
         <div class="lista-musicas playlist-espaco-lista">
             <h3>Músicas na Playlist</h3>
+
             <div class="musica-item" *ngFor="let musica of sharedDataService.musicasPlaylistActual"
                 (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+
                 <img [src]="getRecursoUrl(musica.caminhoFoto)" class="musica-foto" />
                 <div class="musica-info">
                     <h4>{{ musica.titulo }}</h4>
@@ -1217,6 +1247,16 @@
                         </span>
                     </p>
                 </div>
+
+                <div *ngIf="sharedDataService.playlistActual.utilizador.id == sharedDataService.usuarioLogado.id"
+                    class="acoes-solicitacao">
+                    <button (click)="deletarMusicaPlaylist(musica); $event.stopPropagation()" class="botao-rejeitar"><i
+                            class="fas fa-music"></i>
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -1424,7 +1464,7 @@
             <label>Seleccionar grupos:</label>
             <select [(ngModel)]="grupoSelecionado" (change)="adicionarGrupo()">
                 <option [ngValue]="null" disabled selected>Selecione um grupo</option>
-                <option *ngFor="let grupo of conjuntoGruposDisponiveis" [ngValue]="grupo">
+                <option *ngFor="let grupo of gruposDisponiveisFiltrados" [ngValue]="grupo">
                     {{ grupo.nome }} - {{ grupo.descricao }}
                 </option>
             </select>

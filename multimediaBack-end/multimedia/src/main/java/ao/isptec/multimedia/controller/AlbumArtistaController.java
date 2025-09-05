@@ -1,9 +1,12 @@
 package ao.isptec.multimedia.controller;
 
+import ao.isptec.multimedia.dto.AlbumConjuntoArtistas;
+import ao.isptec.multimedia.model.Album;
 import ao.isptec.multimedia.model.AlbumArtista;
 import ao.isptec.multimedia.service.AlbumArtistaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +28,12 @@ public class AlbumArtistaController {
         albumArtistaService.delete(albumArtista);
     }
 
+    @DeleteMapping("/deletePorAlbum/{idAlbum}")
+    public ResponseEntity<Void> deletarPorAlbum(@PathVariable Integer idAlbum) {
+        albumArtistaService.deletarPorAlbum(idAlbum);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
     @GetMapping("/getAll")
     public List<AlbumArtista> getAllAlbunsArtistas() {
         return albumArtistaService.getAllAlbunsArtistas();
@@ -43,6 +52,11 @@ public class AlbumArtistaController {
     @GetMapping("/getAlbumArtistaById")
     public AlbumArtista getAlbumArtistaById(@RequestParam Integer id) {
         return albumArtistaService.findById(id);
+    }
+
+    @PostMapping("/pegarAlbunsArtistasDosAlbuns")
+    public List<AlbumConjuntoArtistas> pegarAlbunsArtistasDosAlbuns(@RequestBody List<Album> albuns) {
+        return albumArtistaService.pegarAlbunsArtistasDosAlbuns(albuns);
     }
 
 }

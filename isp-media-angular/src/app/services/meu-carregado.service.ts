@@ -2,6 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { MeuCarregado } from '../models/MeuCarregado';
 import { HttpClient } from '@angular/common/http';
 import { SharedDataService } from './shared-data.service';
+import { Utilizador } from '../models/Utilizador';
+import { UsuarioMeusCarregados } from '../models/UsuarioMeusCarregados';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class MeuCarregadoService {
 
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `https://${this.sharedDataService.ipServidor}/MeuCarregado`;
+  private baseUrl = `http://${this.sharedDataService.ipServidor}/MeuCarregado`;
   private httpClient = inject(HttpClient);
 
   saveMeuCarregado(meuCarregado: MeuCarregado) {
@@ -46,4 +48,20 @@ export class MeuCarregadoService {
   getMeuCarregadoById(id: number) {
     return this.httpClient.get<MeuCarregado>(`${this.baseUrl}/getMeuCarregadoById?id=${id}`);
   }
+
+  pegarMeusCarregadosDosUsuarios(usuarios: Array<Utilizador>) {
+    return this.httpClient.post<UsuarioMeusCarregados[]>(
+      `${this.baseUrl}/pegarMeusCarregadosDosUsuarios`,
+      usuarios // <-- vai no body
+    );
+  }
+
+  deletarPorMusica(idMusica: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/deletePorMusica/${idMusica}`);
+  }
+
+  deletarPorVideo(idVideo: number) {
+    return this.httpClient.delete<void>(`${this.baseUrl}/deletePorVideo/${idVideo}`);
+  }
+
 }

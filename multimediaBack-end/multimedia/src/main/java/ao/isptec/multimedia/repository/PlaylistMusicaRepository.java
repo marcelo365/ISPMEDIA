@@ -13,4 +13,10 @@ public interface PlaylistMusicaRepository extends JpaRepository<PlaylistMusica, 
     List<PlaylistMusica> findByMusicaId(Integer idMusica);
 
     Optional<PlaylistMusica> findById(Integer id);
+
+    void deleteByMusicaId(Integer idMusica);
+
+    void deleteByPlaylistId(Integer idPlaylist);
+
+    void deleteByMusicaIdAndPlaylistId(Integer idMusica, Integer idPlaylist);
 }

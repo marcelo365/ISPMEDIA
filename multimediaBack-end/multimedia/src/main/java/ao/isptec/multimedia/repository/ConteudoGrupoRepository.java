@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConteudoGrupoRepository extends JpaRepository<ConteudoGrupo, Integer> {
+
     List<ConteudoGrupo> findByGrupoId(Integer idGrupo);
 
     List<ConteudoGrupo> findByMusicaId(Integer idMusica);
@@ -17,4 +18,8 @@ public interface ConteudoGrupoRepository extends JpaRepository<ConteudoGrupo, In
     List<ConteudoGrupo> findByUtilizadorId(Integer idUtilizador);
 
     Optional<ConteudoGrupo> findById(Integer id);
+
+    void deleteByMusicaIdAndGrupoId(Integer musicaId, Integer grupoId);
+
+    void deleteByVideoIdAndGrupoId(Integer videoId, Integer grupoId);
 }

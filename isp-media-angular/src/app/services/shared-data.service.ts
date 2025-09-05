@@ -16,7 +16,8 @@ import { Estacao } from '../models/Estacao';
 })
 export class SharedDataService {
 
-  public readonly ipServidor = "ispmedia.onrender.com";
+  //public readonly ipServidor = "ispmedia.onrender.com";
+  public readonly ipServidor = "localhost:8080";
   private _usuarioLogado!: Utilizador;
 
   //Música Actual e Dados
