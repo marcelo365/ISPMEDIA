@@ -309,7 +309,7 @@ export class PaginaInicialComponent {
   }
 
   getRecursoUrl(caminhoFicheiro: string): string {
-    //return `http://${this.sharedDataService.ipServidor}:8080${caminhoFicheiro}`;
+    //return `https://${this.sharedDataService.ipServidor}:8080${caminhoFicheiro}`;
     return caminhoFicheiro;
   }
 

@@ -13,7 +13,7 @@ export class MusicaArtistaService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}/MusicaArtista`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/MusicaArtista`;
   private httpClient = inject(HttpClient);
 
   saveMusicaArtista(musicaArtista: MusicaArtista) {

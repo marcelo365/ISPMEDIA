@@ -19,8 +19,8 @@ export class SharedDataService {
 
   private storageKey = 'sharedData';
 
-  //public readonly ipServidor = "ispmedia.onrender.com";
-  public readonly ipServidor = "localhost:8080";
+  public readonly ipServidor = "ispmedia.onrender.com";
+  //public readonly ipServidor = "localhost:8080";
   private _usuarioLogado!: Utilizador;
 
   //Música Actual e Dados

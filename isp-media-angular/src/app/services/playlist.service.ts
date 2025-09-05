@@ -13,7 +13,7 @@ export class PlaylistService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}/Playlist`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Playlist`;
   private httpClient = inject(HttpClient);
 
   createPlaylist(playlist: Playlist) {

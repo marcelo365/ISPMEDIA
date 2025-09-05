@@ -12,7 +12,7 @@ export class GrupoService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}/Grupo`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Grupo`;
   private httpClient = inject(HttpClient);
 
   saveGrupo(grupo: Grupo) {

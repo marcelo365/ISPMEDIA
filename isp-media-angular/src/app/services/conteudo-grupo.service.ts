@@ -14,7 +14,7 @@ export class ConteudoGrupoService {
 
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}/ConteudoGrupo`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/ConteudoGrupo`;
   private httpClient = inject(HttpClient);
 
   saveConteudoGrupo(conteudoGrupo: ConteudoGrupo) {

@@ -13,7 +13,7 @@ export class AlbumService {
   constructor() { }
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}/Album`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/Album`;
   private httpClient = inject(HttpClient);
 
   createAlbum(album: Album) {

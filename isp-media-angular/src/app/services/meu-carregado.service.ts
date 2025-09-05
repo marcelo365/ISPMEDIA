@@ -14,7 +14,7 @@ export class MeuCarregadoService {
 
 
   private sharedDataService = inject(SharedDataService);
-  private baseUrl = `http://${this.sharedDataService.ipServidor}/MeuCarregado`;
+  private baseUrl = `https://${this.sharedDataService.ipServidor}/MeuCarregado`;
   private httpClient = inject(HttpClient);
 
   saveMeuCarregado(meuCarregado: MeuCarregado) {
