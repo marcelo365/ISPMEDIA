@@ -1445,7 +1445,7 @@
             <label>Arquivo de Música:</label>
             <input type="file" (change)="onMusicaSelecionada($event)" />
 
-            <label>Capa da Música (Opcional):</label>
+            <label>Capa da Música:</label>
             <input type="file" (change)="onCapaMusicaSelecionada($event)" />
 
             <button
@@ -1511,7 +1511,7 @@
             <label>Arquivo de Vídeo:</label>
             <input type="file" (change)="onVideoSelecionado($event)" />
 
-            <label>Capa do Vídeo (Opcional):</label>
+            <label>Capa do Vídeo:</label>
             <input type="file" (change)="onCapaVideoSelecionado($event)" />
 
             <button (click)="salvarNovoVideo( (abaSeleccionada === 'midiasCarregados') ? true : false )">Salvar</button>
@@ -1705,7 +1705,7 @@
                 </option>
             </select>
 
-            <label>Capa da Música (Opcional):</label>
+            <label>Capa da Música:</label>
             <input type="file" (change)="onCapaMusicaSelecionada($event)" />
 
             <button (click)="editarNovaMusica()">Editar</button>
@@ -1740,7 +1740,7 @@
                 </option>
             </select>
 
-            <label>Capa do Vídeo (Opcional):</label>
+            <label>Capa do Vídeo:</label>
             <input type="file" (change)="onCapaVideoSelecionado($event)" />
 
             <button (click)="editarNovoVideo()">Salvar</button>
