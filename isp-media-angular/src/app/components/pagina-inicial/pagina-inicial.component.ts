@@ -1162,6 +1162,11 @@ export class PaginaInicialComponent {
 
 
   rodarMusica(musica: Musica, artistasMusica: Artista[], conjuntoMusicasLista: Musica[]) {
+
+    this.audio.pause();
+    this.sharedDataService.radioTocando = false;
+    this.fecharEstacaoAtual();
+
     this.sharedDataService.conjuntoMusicasLista = conjuntoMusicasLista;
     this.isReprodutorFechado = false;
     this.isReprodutorMaximizadoFechado = true;
@@ -1262,12 +1267,30 @@ export class PaginaInicialComponent {
     const player = (tipo == "audio") ? this.audioPlayer.nativeElement : this.videoPlayer.nativeElement;
 
     if (player.paused) {
+
       player.play();
 
       if (tipo == "audio") {
+
+        if (this.sharedDataService.videoTocando == true) {
+          this.onVideoPause();
+          this.videoPlayer.nativeElement.pause();
+        }
+
         this.sharedDataService.tocando = true;
         this.sharedDataService.videoTocando = false;
       } else {
+
+        if (this.sharedDataService.tocando == true) {
+          this.sharedDataService.tocando = false;
+          this.audioPlayer.nativeElement.pause();
+        }
+
+        if (this.sharedDataService.radioTocando) {
+          this.audio.pause();
+          this.sharedDataService.radioTocando = false;
+        }
+
         this.sharedDataService.tocando = false;
         this.sharedDataService.videoTocando = true;
       }
@@ -1446,6 +1469,17 @@ export class PaginaInicialComponent {
   rodarVideo(video: Video, conjuntoVideosLista: Video[], tocarProximoAnterior = false) {
     this.sharedDataService.conjuntoVideosLista = conjuntoVideosLista;
 
+    if (this.isReprodutorFechado == false) {
+      this.sharedDataService.tocando = false;
+      this.audioPlayer.nativeElement.pause();
+    }
+
+    if (this.sharedDataService.radioTocando) {
+      this.audio.pause();
+      this.sharedDataService.radioTocando = false;
+    }
+
+
     if (tocarProximoAnterior == false) {
       this.adicionarClasseNoScroll(this.paginaInicial);
     }
@@ -1530,6 +1564,17 @@ export class PaginaInicialComponent {
   }
 
   onVideoPlay() {
+
+    if (this.sharedDataService.tocando == true) {
+      this.sharedDataService.tocando = false;
+      this.audioPlayer.nativeElement.pause();
+    }
+
+    if (this.sharedDataService.radioTocando) {
+      this.audio.pause();
+      this.sharedDataService.radioTocando = false;
+    }
+
     this.sharedDataService.videoTocando = true;
   }
 
@@ -1763,6 +1808,11 @@ export class PaginaInicialComponent {
     this.audio.src = estacao.urlStream; // deve ser um link de stream de rádio válido
     this.audio.play();
     this.sharedDataService.radioTocando = true;
+
+    this.isReprodutorFechado = true;
+    this.sharedDataService.tocando = false;
+    this.audioPlayer.nativeElement.pause();
+
   }
 
   /*tocarEstacao22(estacao: Estacao) {
@@ -1777,6 +1827,12 @@ export class PaginaInicialComponent {
     if (this.sharedDataService.radioTocando) {
       this.audio.pause();
     } else {
+
+      if (this.sharedDataService.videoTocando == true) {
+        this.onVideoPause();
+        this.videoPlayer.nativeElement.pause();
+      }
+
       this.audio.play();
     }
     this.sharedDataService.radioTocando = !this.sharedDataService.radioTocando;
