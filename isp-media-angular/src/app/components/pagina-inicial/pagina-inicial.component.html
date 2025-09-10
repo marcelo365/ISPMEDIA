@@ -171,7 +171,7 @@
             <div class="list">
 
                 <div class="item" *ngFor="let musica of conjuntoMusicas; let i = index"
-                    (click)="rodarMusica(musica , conjuntoArtistasMusicas[i])">
+                    (click)="rodarMusica(musica , conjuntoArtistasMusicas[i] , conjuntoMusicas)">
 
                     <img [src]="getRecursoUrl(musica.caminhoFoto)" />
                     <div class="play">
@@ -199,7 +199,8 @@
             <h2>Vídeos</h2>
 
             <div class="list">
-                <div class="item" *ngFor="let video of conjuntoVideos; let i = index" (click)="rodarVideo(video)">
+                <div class="item" *ngFor="let video of conjuntoVideos; let i = index"
+                    (click)="rodarVideo(video , conjuntoVideos)">
 
                     <img [src]="getRecursoUrl(video.caminhoFoto)" />
 
@@ -275,7 +276,7 @@
                 <div class="list">
                     <div class="item"
                         *ngFor="let musica of pegarMusicasVideosDeUmaCategoria(categoria.id , 'musica'); let i = index"
-                        (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                        (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas) , conjuntoMusicas)">
 
                         <img [src]="getRecursoUrl(musica.caminhoFoto)" />
                         <div class="play">
@@ -321,7 +322,7 @@
 
                 <div class="list">
                     <div class="item" *ngFor="let video of pegarMusicasVideosDeUmaCategoria(categoria.id , 'video')"
-                        (click)="rodarVideo(video)">
+                        (click)="rodarVideo(video , conjuntoVideos)">
 
                         <img [src]="getRecursoUrl(video.caminhoFoto)" />
 
@@ -399,7 +400,7 @@
                         <img [src]="getRecursoUrl(meuCarregadoMusica.musica.caminhoFoto)" />
                         <div class="play">
                             <span
-                                (click)="rodarMusica(meuCarregadoMusica.musica, pegarArtistasMusica(meuCarregadoMusica.musica , conjuntoMusicas , conjuntoArtistasMusicas))"
+                                (click)="rodarMusica(meuCarregadoMusica.musica, pegarArtistasMusica(meuCarregadoMusica.musica , conjuntoMusicas , conjuntoArtistasMusicas) ,  getMusicasConjunto(conjuntoMeusCarregadosMusicas))"
                                 class="fa fa-play"></span>
                             <span (click)="abrirModalEditarMusica(meuCarregadoMusica.musica)"
                                 class="fa fa-pencil da"></span>
@@ -446,7 +447,9 @@
                         <img [src]="getRecursoUrl(meuCarregadoVideo.video.caminhoFoto)" />
 
                         <div class="play">
-                            <span (click)="rodarVideo(meuCarregadoVideo.video)" class="fa fa-play"></span>
+                            <span
+                                (click)="rodarVideo(meuCarregadoVideo.video ,  getVideosConjunto(conjuntoMeusCarregadosVideos))"
+                                class="fa fa-play"></span>
                             <span (click)="abrirModalEditarVideo(meuCarregadoVideo.video)"
                                 class="fa fa-pencil da"></span>
 
@@ -757,7 +760,7 @@
             <div class="list">
                 <div class="item"
                     *ngFor="let musica of pegarMusicasArtista(sharedDataService.artistaActual , conjuntoMusicas , conjuntoArtistasMusicas); let i = index"
-                    (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                    (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas) , pegarMusicasArtista(sharedDataService.artistaActual , conjuntoMusicas , conjuntoArtistasMusicas))">
                     <img [src]="getRecursoUrl(musica.caminhoFoto)" />
                     <div class="play">
                         <span class="fa fa-play"></span>
@@ -798,11 +801,11 @@
 
             <!-- Botões personalizados de avançar e recuar -->
             <div class="video-custom-controls">
-                <i class="fas fa-backward"></i>
+                <i class="fas fa-backward" (click)="tocarVideoAnterior()"></i>
                 <i class="fas" [class.fa-play]="!sharedDataService.videoTocando"
                     [class.fa-pause]="sharedDataService.videoTocando" (click)="alternarPlayPause('video')">
                 </i>
-                <i class="fas fa-forward"></i>
+                <i class="fas fa-forward" (click)="tocarProximoVideo()"></i>
             </div>
 
             <div class="video-info">
@@ -870,7 +873,7 @@
         <div class="lista-musicas">
             <h3>Faixas</h3>
             <div class="musica-item" *ngFor="let musica of sharedDataService.musicasAlbumActual ; let i = index"
-                (click)="rodarMusica(musica , pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                (click)="rodarMusica(musica , pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas) , sharedDataService.musicasAlbumActual)">
                 <img class="musica-foto" [src]="getRecursoUrl(musica.caminhoFoto)" alt="Foto da música">
                 <div class="musica-info">
                     <h4>{{ musica.titulo }}</h4>
@@ -1037,7 +1040,7 @@
                             </div>
 
                             <span
-                                (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))"
+                                (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas) , sharedDataService.musicasGrupoActual)"
                                 class="fa fa-play"></span>
                         </div>
 
@@ -1074,7 +1077,8 @@
                                 <span (click)="deletarConteudoDeUmGrupo(video)" class="fa fa-trash delete-icon"></span>
                             </div>
 
-                            <span (click)="rodarVideo(video)" class="fa fa-play"></span>
+                            <span (click)="rodarVideo(video , sharedDataService.videosGrupoActual)"
+                                class="fa fa-play"></span>
                         </div>
 
                         <h4>{{ video.titulo }}</h4>
@@ -1112,7 +1116,7 @@
                         <img [src]="getRecursoUrl(meuCarregado.musica.caminhoFoto)" />
                         <div class="play">
                             <span
-                                (click)="rodarMusica(meuCarregado.musica, pegarArtistasMusica(meuCarregado.musica , conjuntoMusicas , conjuntoArtistasMusicas))"
+                                (click)="rodarMusica(meuCarregado.musica, pegarArtistasMusica(meuCarregado.musica , conjuntoMusicas , conjuntoArtistasMusicas) , getMusicasConjunto(sharedDataService.musicasCompartilhadas))"
                                 class="fa fa-play"></span>
                             <span (click)="abrirModalEditarMusica(meuCarregado.musica)" class="fa fa-pencil da"></span>
 
@@ -1159,7 +1163,9 @@
                         <img [src]="getRecursoUrl(meuCarregado.video.caminhoFoto)" />
 
                         <div class="play">
-                            <span (click)="rodarVideo(meuCarregado.video)" class="fa fa-play"></span>
+                            <span
+                                (click)="rodarVideo(meuCarregado.video ,  getVideosConjunto(sharedDataService.videosCompartilhados) )"
+                                class="fa fa-play"></span>
                             <span (click)="abrirModalEditarVideo(meuCarregado.video)" class="fa fa-pencil da"></span>
 
                             <span
@@ -1234,7 +1240,7 @@
             <h3>Músicas na Playlist</h3>
 
             <div class="musica-item" *ngFor="let musica of sharedDataService.musicasPlaylistActual"
-                (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas))">
+                (click)="rodarMusica(musica, pegarArtistasMusica(musica , conjuntoMusicas , conjuntoArtistasMusicas) , sharedDataService.musicasPlaylistActual)">
 
                 <img [src]="getRecursoUrl(musica.caminhoFoto)" class="musica-foto" />
                 <div class="musica-info">
@@ -1838,10 +1844,8 @@
 
         <div class="progress-controller">
             <div class="control-buttons">
-                <i class="fas fa-step-backward"></i>
                 <i class="play-pause fas" [class.fa-pause]="sharedDataService.tocando"
                     [class.fa-play]="!sharedDataService.tocando" (click)="alternarPlayPause('audio')"></i>
-                <i class="fas fa-step-forward"></i>
             </div>
 
             <div class="progress-container">
@@ -1909,10 +1913,10 @@
 
         <div class="progress-controller">
             <div class="control-buttons">
-                <i class="fas fa-step-backward"></i>
+                <i class="fas fa-step-backward" (click)="tocarMusicaAnterior()"></i>
                 <i class="play-pause fas" [class.fa-pause]="sharedDataService.tocando"
                     [class.fa-play]="!sharedDataService.tocando" (click)="alternarPlayPause('audio')"></i>
-                <i class="fas fa-step-forward"></i>
+                <i class="fas fa-step-forward" (click)="tocarProximaMusica()"></i>
             </div>
 
             <div class="progress-container">

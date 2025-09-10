@@ -745,6 +745,7 @@ export class PaginaInicialComponent {
     this.conjuntoMusicasDisponiveisParaPlaylist = [...this.conjuntoMusicasGrupoGeral];
 
     this.carregando = false;
+    this.sharedDataService.conjuntoMusicasLista = [...this.conjuntoMusicas];
   }
 
 
@@ -1140,7 +1141,7 @@ export class PaginaInicialComponent {
 
     this.sharedDataService.musicasGrupoActual = [];
     this.sharedDataService.videosGrupoActual = [];
-    
+
     this.conjuntoOriginalMusicasGrupoActual = [];
     this.conjuntoOriginalVideosGrupoActual = [];
     this.conjuntoPesquisaMusicasGrupoActual = [];
@@ -1160,9 +1161,11 @@ export class PaginaInicialComponent {
   }
 
 
-  rodarMusica(musica: Musica, artistasMusica: Artista[]) {
+  rodarMusica(musica: Musica, artistasMusica: Artista[], conjuntoMusicasLista: Musica[]) {
+    this.sharedDataService.conjuntoMusicasLista = conjuntoMusicasLista;
     this.isReprodutorFechado = false;
     this.isReprodutorMaximizadoFechado = true;
+
     this.sharedDataService.musicaActual = musica;
     this.sharedDataService.artistasMusicaActual = artistasMusica;
 
@@ -1202,6 +1205,57 @@ export class PaginaInicialComponent {
     }, 0);
 
   }
+
+  tocarProximaMusica() {
+
+    let musicaAtualIndex = this.sharedDataService.conjuntoMusicasLista.findIndex(m => m.id === this.sharedDataService.musicaActual.id);
+
+    //musicaAtualIndex = (musicaAtualIndex != -1) ? musicaAtualIndex : 0;
+
+    if (this.sharedDataService.conjuntoMusicasLista.length === 0) return;
+
+    // se estiver na última, volta para a primeira
+    if (musicaAtualIndex >= this.sharedDataService.conjuntoMusicasLista.length - 1) {
+      musicaAtualIndex = 0;
+    } else {
+      musicaAtualIndex++;
+    }
+
+    const musica = this.sharedDataService.conjuntoMusicasLista[musicaAtualIndex];
+    const artistas = this.pegarArtistasMusica(musica, this.conjuntoMusicas, this.conjuntoArtistasMusicas); // ajusta conforme tua estrutura
+
+    if (this.isReprodutorMaximizadoFechado == false) {
+      this.rodarMusica(musica, artistas, this.sharedDataService.conjuntoMusicasLista);
+    } else {
+      this.rodarMusica(musica, artistas, this.sharedDataService.conjuntoMusicasLista);
+    }
+
+  }
+
+  tocarMusicaAnterior() {
+
+    let musicaAtualIndex = this.sharedDataService.conjuntoMusicasLista.findIndex(m => m.id === this.sharedDataService.musicaActual.id);
+
+    if (this.sharedDataService.conjuntoMusicasLista.length === 0) return;
+
+    // se estiver na primeira, vai para a última
+    if (musicaAtualIndex <= 0) {
+      musicaAtualIndex = this.sharedDataService.conjuntoMusicasLista.length - 1;
+    } else {
+      musicaAtualIndex--;
+    }
+
+    const musica = this.sharedDataService.conjuntoMusicasLista[musicaAtualIndex];
+    const artistas = this.pegarArtistasMusica(musica, this.conjuntoMusicas, this.conjuntoArtistasMusicas); // ajusta conforme tua estrutura
+
+    if (this.isReprodutorMaximizadoFechado == false) {
+      this.rodarMusica(musica, artistas, this.sharedDataService.conjuntoMusicasLista);
+    } else {
+      this.rodarMusica(musica, artistas, this.sharedDataService.conjuntoMusicasLista);
+    }
+
+  }
+
 
   alternarPlayPause(tipo: 'audio' | 'video') {
 
@@ -1276,6 +1330,8 @@ export class PaginaInicialComponent {
     audio.play();
     this.sharedDataService.tocando = true;
   }
+
+
 
   //função que abre página de visualização de um álbum
   abrirVisualizacaoAlbum(album: Album) {
@@ -1387,8 +1443,13 @@ export class PaginaInicialComponent {
   }
 
 
-  rodarVideo(video: Video) {
-    this.adicionarClasseNoScroll(this.paginaInicial);
+  rodarVideo(video: Video, conjuntoVideosLista: Video[], tocarProximoAnterior = false) {
+    this.sharedDataService.conjuntoVideosLista = conjuntoVideosLista;
+
+    if (tocarProximoAnterior == false) {
+      this.adicionarClasseNoScroll(this.paginaInicial);
+    }
+
     this.isPaginaVideoFechado = false;
     this.sharedDataService.videoActual = video;
 
@@ -1426,6 +1487,41 @@ export class PaginaInicialComponent {
         console.error('HLS não suportado no navegador');
       }
     }, 0);
+  }
+
+  tocarProximoVideo() {
+
+    let videoAtualIndex = this.sharedDataService.conjuntoVideosLista.findIndex(m => m.id === this.sharedDataService.videoActual.id);
+
+    //musicaAtualIndex = (musicaAtualIndex != -1) ? musicaAtualIndex : 0;
+
+    if (this.sharedDataService.conjuntoVideosLista.length === 0) return;
+
+    // se estiver na última, volta para a primeira
+    if (videoAtualIndex >= this.sharedDataService.conjuntoVideosLista.length - 1) {
+      videoAtualIndex = 0;
+    } else {
+      videoAtualIndex++;
+    }
+
+    const video = this.sharedDataService.conjuntoVideosLista[videoAtualIndex];
+    this.rodarVideo(video, this.sharedDataService.conjuntoVideosLista, true);
+  }
+
+  tocarVideoAnterior() {
+    let videoAtualIndex = this.sharedDataService.conjuntoVideosLista.findIndex(m => m.id === this.sharedDataService.videoActual.id);
+
+    if (this.sharedDataService.conjuntoVideosLista.length === 0) return;
+
+    // se estiver na primeira, vai para a última
+    if (videoAtualIndex <= 0) {
+      videoAtualIndex = this.sharedDataService.conjuntoVideosLista.length - 1;
+    } else {
+      videoAtualIndex--;
+    }
+
+    const video = this.sharedDataService.conjuntoVideosLista[videoAtualIndex];
+    this.rodarVideo(video, this.sharedDataService.conjuntoVideosLista, true);
   }
 
   fecharVisualizacaoVideo() {
@@ -3623,6 +3719,18 @@ export class PaginaInicialComponent {
       this.carregarItens();
     }
 
+  }
+
+  getMusicasConjunto(lista: any[]) {
+    return lista
+      .filter(m => m.musica) // mantém só quem tem musica
+      .map(m => m.musica);   // extrai só a musica
+  }
+
+  getVideosConjunto(lista: any[]) {
+    return lista
+      .filter(m => m.video) // mantém só quem tem musica
+      .map(m => m.video);   // extrai só a musica
   }
 
 

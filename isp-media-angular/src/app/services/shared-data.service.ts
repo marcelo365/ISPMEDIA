@@ -23,6 +23,11 @@ export class SharedDataService {
   //public readonly ipServidor = "localhost:8080";
   private _usuarioLogado!: Utilizador;
 
+  //conjuntos Anterior e Próximo / Música e Vídeo
+  private _conjuntoMusicasLista!: Musica[];
+  private _conjuntoVideosLista!: Video[];
+
+
   //Música Actual e Dados
   private _musicaActual!: Musica;
   private _artistasMusicaActual!: Artista[];
@@ -139,7 +144,10 @@ export class SharedDataService {
 
         _tipoConteudoPartilhaGrupo: this._tipoConteudoPartilhaGrupo,
         _musicaActualPartilhaGrupo: this._musicaActualPartilhaGrupo,
-        _videoActualPartilhaGrupo: this._videoActualPartilhaGrupo
+        _videoActualPartilhaGrupo: this._videoActualPartilhaGrupo,
+        _conjuntoMusicasLista: this.conjuntoMusicasLista,
+        _conjuntoVideosLista: this.conjuntoVideosLista
+
       };
       localStorage.setItem(this.storageKey, JSON.stringify(obj));
     }
@@ -155,6 +163,24 @@ export class SharedDataService {
 
   public set utilizadorActual(value: Utilizador) {
     this._utilizadorActual = value;
+    this.salvarNoLocalStorage();
+  }
+
+  public get conjuntoMusicasLista(): Musica[] {
+    return this._conjuntoMusicasLista;
+  }
+
+  public set conjuntoMusicasLista(value: Musica[]) {
+    this._conjuntoMusicasLista = value;
+    this.salvarNoLocalStorage();
+  }
+
+  public get conjuntoVideosLista(): Video[] {
+    return this._conjuntoVideosLista;
+  }
+
+  public set conjuntoVideosLista(value: Video[]) {
+    this._conjuntoVideosLista = value;
     this.salvarNoLocalStorage();
   }
 
