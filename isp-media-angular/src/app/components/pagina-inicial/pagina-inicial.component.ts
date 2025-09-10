@@ -308,6 +308,12 @@ export class PaginaInicialComponent {
     this.carregarItens();
   }
 
+  ngOnDestroy() {
+    if (this.audio) {
+      this.fecharEstacaoAtual();
+    }
+  }
+
   getRecursoUrl(caminhoFicheiro: string): string {
     //return `https://${this.sharedDataService.ipServidor}:8080${caminhoFicheiro}`;
     return caminhoFicheiro;
