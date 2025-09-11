@@ -79,6 +79,8 @@ export class PaginaLoginRegistoComponent {
       return;
     }
 
+
+    this.toast.warning('Aguarde um Momento ...', '⚠️ Atenção!');
     this.verificarUtilizador();
 
   }
