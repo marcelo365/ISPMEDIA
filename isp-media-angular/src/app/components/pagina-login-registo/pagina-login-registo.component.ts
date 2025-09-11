@@ -81,6 +81,7 @@ export class PaginaLoginRegistoComponent {
 
 
     this.toast.warning('Aguarde um Momento ...', '⚠️ Atenção!');
+
     this.verificarUtilizador();
 
   }
@@ -183,6 +184,9 @@ export class PaginaLoginRegistoComponent {
       this.toast.error('Campo vazio , porfavor digite a senha', 'Erro!', { closeButton: true });
       return;
     }
+
+
+    this.toast.warning('Aguarde um Momento ...', '⚠️ Atenção!');
 
     this.utilizadorService.getUtilizadorByUserNameAndSenha(this.usernameLogin, this.senhaLogin).subscribe({
       next: (res) => {
